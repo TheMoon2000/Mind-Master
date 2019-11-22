@@ -82,6 +82,9 @@ extension ReactionChallengeMenu: UITableViewDataSource, UITableViewDelegate {
         case 0:
             let vc = ReactionTimeChallenge()
             navigationController?.pushViewController(vc, animated: true)
+        case 1:
+            let vc = GridChallenge()
+            navigationController?.pushViewController(vc, animated: true)
         default:
             break
         }

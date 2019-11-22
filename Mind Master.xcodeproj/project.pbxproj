@@ -21,6 +21,9 @@
 		CC5FB2DF237602D20069AEC1 /* PlayerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2DE237602D20069AEC1 /* PlayerRecord.swift */; };
 		CC5FB2E12376273D0069AEC1 /* MemoryChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2E02376273D0069AEC1 /* MemoryChallenge.swift */; };
 		CC7195632387D1C80018B6F6 /* ReactionChallengeMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7195622387D1C80018B6F6 /* ReactionChallengeMenu.swift */; };
+		CCE2B273238853BD0092A19F /* GridChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE2B272238853BD0092A19F /* GridChallenge.swift */; };
+		CCF92C60238897A5002BBE09 /* GridHighScores.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF92C5F238897A5002BBE09 /* GridHighScores.swift */; };
+		CCF92C62238898F8002BBE09 /* GridHighscoreEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF92C61238898F8002BBE09 /* GridHighscoreEntry.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +46,9 @@
 		CC5FB2DE237602D20069AEC1 /* PlayerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerRecord.swift; sourceTree = "<group>"; };
 		CC5FB2E02376273D0069AEC1 /* MemoryChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryChallenge.swift; sourceTree = "<group>"; };
 		CC7195622387D1C80018B6F6 /* ReactionChallengeMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionChallengeMenu.swift; sourceTree = "<group>"; };
+		CCE2B272238853BD0092A19F /* GridChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridChallenge.swift; sourceTree = "<group>"; };
+		CCF92C5F238897A5002BBE09 /* GridHighScores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridHighScores.swift; sourceTree = "<group>"; };
+		CCF92C61238898F8002BBE09 /* GridHighscoreEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridHighscoreEntry.swift; sourceTree = "<group>"; };
 		F032401D1D6315483F2A1196 /* Pods-Mind Master.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mind Master.release.xcconfig"; path = "Target Support Files/Pods-Mind Master/Pods-Mind Master.release.xcconfig"; sourceTree = "<group>"; };
 		F6CF57ECD88248BDB3B2EFD7 /* Pods-Mind Master.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mind Master.debug.xcconfig"; path = "Target Support Files/Pods-Mind Master/Pods-Mind Master.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -117,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				CC5FB2CD2375E8160069AEC1 /* ChallengeTypeCell.swift */,
+				CCF92C61238898F8002BBE09 /* GridHighscoreEntry.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -146,6 +153,8 @@
 			children = (
 				CC7195622387D1C80018B6F6 /* ReactionChallengeMenu.swift */,
 				CC5FB2D42375F6B10069AEC1 /* ReactionTimeChallenge.swift */,
+				CCE2B272238853BD0092A19F /* GridChallenge.swift */,
+				CCF92C5F238897A5002BBE09 /* GridHighScores.swift */,
 			);
 			path = Reaction;
 			sourceTree = "<group>";
@@ -276,14 +285,17 @@
 				CC5FB2DF237602D20069AEC1 /* PlayerRecord.swift in Sources */,
 				CC5FB2BD2375E7C90069AEC1 /* MainMenu.swift in Sources */,
 				CC7195632387D1C80018B6F6 /* ReactionChallengeMenu.swift in Sources */,
+				CCE2B273238853BD0092A19F /* GridChallenge.swift in Sources */,
 				CC5FB2B92375E7C90069AEC1 /* AppDelegate.swift in Sources */,
 				CC5FB2CE2375E8160069AEC1 /* ChallengeTypeCell.swift in Sources */,
 				CC5FB2D22375EBC10069AEC1 /* TintedNavController.swift in Sources */,
+				CCF92C62238898F8002BBE09 /* GridHighscoreEntry.swift in Sources */,
 				CC5FB2D02375E8530069AEC1 /* Global Constants.swift in Sources */,
 				CC5FB2E12376273D0069AEC1 /* MemoryChallenge.swift in Sources */,
 				CC5FB2DC2376028A0069AEC1 /* NSData+AESCrypt.m in Sources */,
 				CC5FB2D52375F6B10069AEC1 /* ReactionTimeChallenge.swift in Sources */,
 				CC5FB2DB2376028A0069AEC1 /* NSString+AESCrypt.m in Sources */,
+				CCF92C60238897A5002BBE09 /* GridHighScores.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

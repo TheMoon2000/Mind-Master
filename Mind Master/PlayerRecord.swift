@@ -16,6 +16,10 @@ class PlayerRecord: NSObject {
     // Reaction time
     var reaction: Double? { didSet { save() } }
     
+    var gridHelp = true { didSet { save() } }
+    var gridIterations: Int = 10 { didSet { save() } }
+    var gridRecord = [Int: Double]() { didSet { save() } }
+    
     // Memory challenge
     var memoryMaxLength: Int? { didSet { save() } }
     var memoryItemCount = 8 { didSet { save() } }
@@ -33,16 +37,33 @@ class PlayerRecord: NSObject {
         let dictionary = data.dictionaryValue
         
         reaction = dictionary["reaction"]?.double
+        gridHelp = dictionary["showGridHelpScreen"]?.bool ?? true
+        if let record = dictionary["grid"]?.dictionaryObject as? [String: Double] {
+            for (length, duration) in record {
+                gridRecord[Int(length) ?? 0] = duration
+            }
+        }
         memoryMaxLength = dictionary["memoryMaxLength"]?.int
+        memoryItemCount = dictionary["memoryItemCount"]?.int ?? 8
+        delayPerItem = dictionary["memoryDelay"]?.double ?? 1.0
+        memoryTestType = dictionary["memoryTestType"]?.int ?? 0
     }
     
     var encodedJSON: JSON {
         var json = JSON()
         json.dictionaryObject?["reaction"] = reaction
+        json.dictionaryObject?["showGridHelpScreen"] = gridHelp
         json.dictionaryObject?["memoryMaxLength"] = memoryMaxLength
         json.dictionaryObject?["memoryItemCount"] = memoryItemCount
         json.dictionaryObject?["memoryDelay"] = delayPerItem
         json.dictionaryObject?["memoryTestType"] = memoryTestType
+        
+        var serializedRecord = [String: Double]()
+        for (length, duration) in gridRecord {
+            serializedRecord[String(length)] = duration
+        }
+        
+        json.dictionaryObject?["grid"] = serializedRecord
         
         return json
     }

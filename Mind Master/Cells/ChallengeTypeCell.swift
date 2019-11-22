@@ -48,8 +48,8 @@ class ChallengeTypeCell: UITableViewCell {
             bgView.addSubview(iv)
             
             iv.leftAnchor.constraint(equalTo: bgView.leftAnchor, constant: 18).isActive = true
-            iv.widthAnchor.constraint(equalToConstant: 27).isActive = true
-            iv.heightAnchor.constraint(equalTo: iv.widthAnchor).isActive = true
+            iv.widthAnchor.constraint(equalToConstant: 30).isActive = true
+            iv.heightAnchor.constraint(equalToConstant: 28).isActive = true
             iv.centerYAnchor.constraint(equalTo: bgView.centerYAnchor).isActive = true
             
             return iv

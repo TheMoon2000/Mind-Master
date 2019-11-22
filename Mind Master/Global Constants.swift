@@ -15,8 +15,14 @@ let AES_KEY = "MINDMASTER"
 
 struct AppColors {
     
-    /// The color used for memory tests.
+    /// The color used for reaction colors.
     static var reaction = UIColor(named: "AppColors.reaction")!
+    
+    /// The color used for the disabled reaction color.
+    static var reactionLight = UIColor(named: "AppColors.reactionLight")!
+    
+    /// The color used for the dark reaction color.
+    static var reactionDark = UIColor(named: "AppColors.reactionDark")!
     
     /// The memory theme color.
     static var memory = UIColor(named: "AppColors.memory")!
@@ -128,3 +134,5 @@ extension StringStyle {
         .lineBreakMode(.byTruncatingTail)
     )
 }
+
+let DISABLED_ALPHA: CGFloat = 0.5
