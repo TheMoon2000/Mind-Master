@@ -3,27 +3,48 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		741873A326C195CA5410B551 /* Pods_Mind_Master.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31540F38DE69E3C8353969E4 /* Pods_Mind_Master.framework */; };
 		CC5FB2B92375E7C90069AEC1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2B82375E7C90069AEC1 /* AppDelegate.swift */; };
-		CC5FB2BB2375E7C90069AEC1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2BA2375E7C90069AEC1 /* SceneDelegate.swift */; };
-		CC5FB2BD2375E7C90069AEC1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2BC2375E7C90069AEC1 /* ViewController.swift */; };
-		CC5FB2C02375E7C90069AEC1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC5FB2BE2375E7C90069AEC1 /* Main.storyboard */; };
+		CC5FB2BD2375E7C90069AEC1 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2BC2375E7C90069AEC1 /* MainMenu.swift */; };
 		CC5FB2C22375E7CC0069AEC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC5FB2C12375E7CC0069AEC1 /* Assets.xcassets */; };
 		CC5FB2C52375E7CC0069AEC1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC5FB2C32375E7CC0069AEC1 /* LaunchScreen.storyboard */; };
+		CC5FB2CE2375E8160069AEC1 /* ChallengeTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2CD2375E8160069AEC1 /* ChallengeTypeCell.swift */; };
+		CC5FB2D02375E8530069AEC1 /* Global Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2CF2375E8530069AEC1 /* Global Constants.swift */; };
+		CC5FB2D22375EBC10069AEC1 /* TintedNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2D12375EBC10069AEC1 /* TintedNavController.swift */; };
+		CC5FB2D52375F6B10069AEC1 /* ReactionTimeChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2D42375F6B10069AEC1 /* ReactionTimeChallenge.swift */; };
+		CC5FB2DB2376028A0069AEC1 /* NSString+AESCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2D8237602890069AEC1 /* NSString+AESCrypt.m */; };
+		CC5FB2DC2376028A0069AEC1 /* NSData+AESCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2DA2376028A0069AEC1 /* NSData+AESCrypt.m */; };
+		CC5FB2DF237602D20069AEC1 /* PlayerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2DE237602D20069AEC1 /* PlayerRecord.swift */; };
+		CC5FB2E12376273D0069AEC1 /* MemoryChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2E02376273D0069AEC1 /* MemoryChallenge.swift */; };
+		CC7195632387D1C80018B6F6 /* ReactionChallengeMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7195622387D1C80018B6F6 /* ReactionChallengeMenu.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		31540F38DE69E3C8353969E4 /* Pods_Mind_Master.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mind_Master.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC5FB2B52375E7C90069AEC1 /* Mind Master.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mind Master.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC5FB2B82375E7C90069AEC1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		CC5FB2BA2375E7C90069AEC1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CC5FB2BC2375E7C90069AEC1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		CC5FB2BF2375E7C90069AEC1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		CC5FB2BC2375E7C90069AEC1 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		CC5FB2C12375E7CC0069AEC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC5FB2C42375E7CC0069AEC1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CC5FB2C62375E7CC0069AEC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CC5FB2CD2375E8160069AEC1 /* ChallengeTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeTypeCell.swift; sourceTree = "<group>"; };
+		CC5FB2CF2375E8530069AEC1 /* Global Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Constants.swift"; sourceTree = "<group>"; };
+		CC5FB2D12375EBC10069AEC1 /* TintedNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TintedNavController.swift; sourceTree = "<group>"; };
+		CC5FB2D42375F6B10069AEC1 /* ReactionTimeChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionTimeChallenge.swift; sourceTree = "<group>"; };
+		CC5FB2D6237602890069AEC1 /* Mind Master-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mind Master-Bridging-Header.h"; sourceTree = "<group>"; };
+		CC5FB2D7237602890069AEC1 /* NSData+AESCrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AESCrypt.h"; sourceTree = "<group>"; };
+		CC5FB2D8237602890069AEC1 /* NSString+AESCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+AESCrypt.m"; sourceTree = "<group>"; };
+		CC5FB2D92376028A0069AEC1 /* NSString+AESCrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+AESCrypt.h"; sourceTree = "<group>"; };
+		CC5FB2DA2376028A0069AEC1 /* NSData+AESCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AESCrypt.m"; sourceTree = "<group>"; };
+		CC5FB2DE237602D20069AEC1 /* PlayerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerRecord.swift; sourceTree = "<group>"; };
+		CC5FB2E02376273D0069AEC1 /* MemoryChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryChallenge.swift; sourceTree = "<group>"; };
+		CC7195622387D1C80018B6F6 /* ReactionChallengeMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionChallengeMenu.swift; sourceTree = "<group>"; };
+		F032401D1D6315483F2A1196 /* Pods-Mind Master.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mind Master.release.xcconfig"; path = "Target Support Files/Pods-Mind Master/Pods-Mind Master.release.xcconfig"; sourceTree = "<group>"; };
+		F6CF57ECD88248BDB3B2EFD7 /* Pods-Mind Master.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mind Master.debug.xcconfig"; path = "Target Support Files/Pods-Mind Master/Pods-Mind Master.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +52,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				741873A326C195CA5410B551 /* Pods_Mind_Master.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		668AC002F285EB248E8AFA67 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				31540F38DE69E3C8353969E4 /* Pods_Mind_Master.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8F4AB821A02A2314B0FD2B40 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F6CF57ECD88248BDB3B2EFD7 /* Pods-Mind Master.debug.xcconfig */,
+				F032401D1D6315483F2A1196 /* Pods-Mind Master.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		CC5FB2AC2375E7C90069AEC1 = {
 			isa = PBXGroup;
 			children = (
 				CC5FB2B72375E7C90069AEC1 /* Mind Master */,
 				CC5FB2B62375E7C90069AEC1 /* Products */,
+				8F4AB821A02A2314B0FD2B40 /* Pods */,
+				668AC002F285EB248E8AFA67 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,14 +98,64 @@
 			isa = PBXGroup;
 			children = (
 				CC5FB2B82375E7C90069AEC1 /* AppDelegate.swift */,
-				CC5FB2BA2375E7C90069AEC1 /* SceneDelegate.swift */,
-				CC5FB2BC2375E7C90069AEC1 /* ViewController.swift */,
-				CC5FB2BE2375E7C90069AEC1 /* Main.storyboard */,
+				CC5FB2CF2375E8530069AEC1 /* Global Constants.swift */,
+				CC5FB2DE237602D20069AEC1 /* PlayerRecord.swift */,
+				CC5FB2D12375EBC10069AEC1 /* TintedNavController.swift */,
+				CC5FB2BC2375E7C90069AEC1 /* MainMenu.swift */,
+				CC5FB2DD237602900069AEC1 /* Objective-C */,
+				CC5FB2D32375F69B0069AEC1 /* Challenges */,
+				CC5FB2CC2375E7FD0069AEC1 /* Cells */,
 				CC5FB2C12375E7CC0069AEC1 /* Assets.xcassets */,
 				CC5FB2C32375E7CC0069AEC1 /* LaunchScreen.storyboard */,
 				CC5FB2C62375E7CC0069AEC1 /* Info.plist */,
+				CC5FB2D6237602890069AEC1 /* Mind Master-Bridging-Header.h */,
 			);
 			path = "Mind Master";
+			sourceTree = "<group>";
+		};
+		CC5FB2CC2375E7FD0069AEC1 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				CC5FB2CD2375E8160069AEC1 /* ChallengeTypeCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		CC5FB2D32375F69B0069AEC1 /* Challenges */ = {
+			isa = PBXGroup;
+			children = (
+				CC7195642387D4A50018B6F6 /* Reaction */,
+				CC7195652387D4B00018B6F6 /* Memory */,
+			);
+			path = Challenges;
+			sourceTree = "<group>";
+		};
+		CC5FB2DD237602900069AEC1 /* Objective-C */ = {
+			isa = PBXGroup;
+			children = (
+				CC5FB2D7237602890069AEC1 /* NSData+AESCrypt.h */,
+				CC5FB2DA2376028A0069AEC1 /* NSData+AESCrypt.m */,
+				CC5FB2D92376028A0069AEC1 /* NSString+AESCrypt.h */,
+				CC5FB2D8237602890069AEC1 /* NSString+AESCrypt.m */,
+			);
+			path = "Objective-C";
+			sourceTree = "<group>";
+		};
+		CC7195642387D4A50018B6F6 /* Reaction */ = {
+			isa = PBXGroup;
+			children = (
+				CC7195622387D1C80018B6F6 /* ReactionChallengeMenu.swift */,
+				CC5FB2D42375F6B10069AEC1 /* ReactionTimeChallenge.swift */,
+			);
+			path = Reaction;
+			sourceTree = "<group>";
+		};
+		CC7195652387D4B00018B6F6 /* Memory */ = {
+			isa = PBXGroup;
+			children = (
+				CC5FB2E02376273D0069AEC1 /* MemoryChallenge.swift */,
+			);
+			path = Memory;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,9 +165,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CC5FB2C92375E7CC0069AEC1 /* Build configuration list for PBXNativeTarget "Mind Master" */;
 			buildPhases = (
+				750DA4D5CF4609E28088FDCC /* [CP] Check Pods Manifest.lock */,
 				CC5FB2B12375E7C90069AEC1 /* Sources */,
 				CC5FB2B22375E7C90069AEC1 /* Frameworks */,
 				CC5FB2B32375E7C90069AEC1 /* Resources */,
+				CE5DA24127B8F32CF38D6F9F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -99,6 +192,7 @@
 				TargetAttributes = {
 					CC5FB2B42375E7C90069AEC1 = {
 						CreatedOnToolsVersion = 11.0;
+						LastSwiftMigration = 1100;
 					};
 				};
 			};
@@ -127,34 +221,75 @@
 			files = (
 				CC5FB2C52375E7CC0069AEC1 /* LaunchScreen.storyboard in Resources */,
 				CC5FB2C22375E7CC0069AEC1 /* Assets.xcassets in Resources */,
-				CC5FB2C02375E7C90069AEC1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		750DA4D5CF4609E28088FDCC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Mind Master-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CE5DA24127B8F32CF38D6F9F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Mind Master/Pods-Mind Master-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Mind Master/Pods-Mind Master-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mind Master/Pods-Mind Master-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CC5FB2B12375E7C90069AEC1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC5FB2BD2375E7C90069AEC1 /* ViewController.swift in Sources */,
+				CC5FB2DF237602D20069AEC1 /* PlayerRecord.swift in Sources */,
+				CC5FB2BD2375E7C90069AEC1 /* MainMenu.swift in Sources */,
+				CC7195632387D1C80018B6F6 /* ReactionChallengeMenu.swift in Sources */,
 				CC5FB2B92375E7C90069AEC1 /* AppDelegate.swift in Sources */,
-				CC5FB2BB2375E7C90069AEC1 /* SceneDelegate.swift in Sources */,
+				CC5FB2CE2375E8160069AEC1 /* ChallengeTypeCell.swift in Sources */,
+				CC5FB2D22375EBC10069AEC1 /* TintedNavController.swift in Sources */,
+				CC5FB2D02375E8530069AEC1 /* Global Constants.swift in Sources */,
+				CC5FB2E12376273D0069AEC1 /* MemoryChallenge.swift in Sources */,
+				CC5FB2DC2376028A0069AEC1 /* NSData+AESCrypt.m in Sources */,
+				CC5FB2D52375F6B10069AEC1 /* ReactionTimeChallenge.swift in Sources */,
+				CC5FB2DB2376028A0069AEC1 /* NSString+AESCrypt.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		CC5FB2BE2375E7C90069AEC1 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CC5FB2BF2375E7C90069AEC1 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		CC5FB2C32375E7CC0069AEC1 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -216,7 +351,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -270,7 +405,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -282,8 +417,10 @@
 		};
 		CC5FB2CA2375E7CC0069AEC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F6CF57ECD88248BDB3B2EFD7 /* Pods-Mind Master.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = US8T2D45H8;
 				INFOPLIST_FILE = "Mind Master/Info.plist";
@@ -293,6 +430,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.themoon2000.Mind-Master";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Mind Master/Mind Master-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -300,8 +439,10 @@
 		};
 		CC5FB2CB2375E7CC0069AEC1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F032401D1D6315483F2A1196 /* Pods-Mind Master.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = US8T2D45H8;
 				INFOPLIST_FILE = "Mind Master/Info.plist";
@@ -311,6 +452,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.themoon2000.Mind-Master";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Mind Master/Mind Master-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
