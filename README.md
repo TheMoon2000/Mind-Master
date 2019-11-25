@@ -30,11 +30,14 @@ A collection of challenges (games) that can boost one's cognitive capacity. It's
     <br>
     
     After you finish playing a round of the game, you will see your score. You can also review the questions and compare your answers against the correct ones. Both colors and characters are supported.
-    <br>
+    
+    <br> 
+    
     <img src="Screenshots/recall-result.png" width=240>
     <img src="Screenshots/memory-recall-answers.png" width=240>
     <img src="Screenshots/memory-color-answers.png" width=240>
 
     - Monochrome. This is just a variation of the “color” mode, but this time all the colors are in grayscale. In my opinion this is even harder than have a variety of colors, but I'm sure there are very smart people who can handle this challenge. Here I used the answer screen to show how the colors are generated and displayed.
 
-    <img src="Screenshots/memory-monochrome-result.png">
+    <br>
+    <img src="Screenshots/memory-monochrome-result.png" width=240>
