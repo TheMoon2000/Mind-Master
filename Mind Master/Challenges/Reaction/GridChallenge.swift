@@ -429,7 +429,7 @@ class GridChallenge: UIViewController {
     }
     
     @objc private func tileReleased(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: 0.1) {
             sender.backgroundColor = sender.backgroundColor == AppColors.reactionDark ? AppColors.reaction : AppColors.disabled
         }
     }
