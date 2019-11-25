@@ -20,7 +20,7 @@ class GridHighscoreEntry: UITableViewCell {
         selectionStyle = .none
         backgroundColor = .clear
         
-        let h = heightAnchor.constraint(equalToConstant: 60)
+        let h = heightAnchor.constraint(equalToConstant: 65)
         h.priority = .defaultHigh
         h.isActive = true
         
@@ -34,8 +34,8 @@ class GridHighscoreEntry: UITableViewCell {
             
             view.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true
             view.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
-            view.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
-            let b = view.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5)
+            view.topAnchor.constraint(equalTo: topAnchor, constant: 6).isActive = true
+            let b = view.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6)
             b.priority = .defaultHigh
             b.isActive = true
             

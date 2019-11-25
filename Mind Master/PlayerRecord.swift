@@ -20,13 +20,17 @@ class PlayerRecord: NSObject {
     var gridIterations: Int = 10 { didSet { save() } }
     var gridRecord = [Int: Double]() { didSet { save() } }
     
+    // Color dodge
+    var trackNumber = 4 { didSet { save() } }
+    var dodgeHighscore = 0 { didSet { save() } }
+    
     // Memory challenge
     var memoryMaxLength: Int? { didSet { save() } }
     var memoryItemCount = 8 { didSet { save() } }
     var delayPerItem = 1.0 { didSet { save() } }
     
     /// The segment index of the memory test type.
-    var memoryTestType = 0 { didSet { save() } }
+    var memoryTestType: RecallType = .digits { didSet { save() } }
     
     override init() {
         reaction = nil
@@ -37,26 +41,33 @@ class PlayerRecord: NSObject {
         let dictionary = data.dictionaryValue
         
         reaction = dictionary["reaction"]?.double
+        
+        // Grid
         gridHelp = dictionary["showGridHelpScreen"]?.bool ?? true
+        gridIterations = dictionary["gridIterations"]?.int ?? 10
         if let record = dictionary["grid"]?.dictionaryObject as? [String: Double] {
             for (length, duration) in record {
                 gridRecord[Int(length) ?? 0] = duration
             }
         }
+        
         memoryMaxLength = dictionary["memoryMaxLength"]?.int
         memoryItemCount = dictionary["memoryItemCount"]?.int ?? 8
         delayPerItem = dictionary["memoryDelay"]?.double ?? 1.0
-        memoryTestType = dictionary["memoryTestType"]?.int ?? 0
+        memoryTestType = .init(rawValue: dictionary["memoryTestType"]?.int ?? 1)
     }
     
     var encodedJSON: JSON {
         var json = JSON()
         json.dictionaryObject?["reaction"] = reaction
+        
+        json.dictionaryObject?["gridIterations"] = gridIterations
         json.dictionaryObject?["showGridHelpScreen"] = gridHelp
+        
         json.dictionaryObject?["memoryMaxLength"] = memoryMaxLength
         json.dictionaryObject?["memoryItemCount"] = memoryItemCount
         json.dictionaryObject?["memoryDelay"] = delayPerItem
-        json.dictionaryObject?["memoryTestType"] = memoryTestType
+        json.dictionaryObject?["memoryTestType"] = memoryTestType.rawValue
         
         var serializedRecord = [String: Double]()
         for (length, duration) in gridRecord {

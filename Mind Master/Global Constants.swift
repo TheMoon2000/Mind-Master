@@ -27,6 +27,9 @@ struct AppColors {
     /// The memory theme color.
     static var memory = UIColor(named: "AppColors.memory")!
     
+    /// Color dodge track color.
+    static var trackColor = UIColor(named: "AppColors.track")!
+    
     /// The disabled theme color.
     static var mainDisabled = UIColor(named: "AppColors.mainDisabled")!
     
@@ -133,6 +136,20 @@ extension StringStyle {
         .lineHeightMultiple(1.2),
         .lineBreakMode(.byTruncatingTail)
     )
+}
+
+extension CGPoint {
+    func distance(to other: CGPoint) -> CGFloat {
+        return sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y))
+    }
+}
+
+struct RecallType: OptionSet {
+    let rawValue: Int
+    
+    static let digits       = RecallType(rawValue: 1)
+    static let letters      = RecallType(rawValue: 1 << 1)
+    static let colors       = RecallType(rawValue: 1 << 2)
 }
 
 let DISABLED_ALPHA: CGFloat = 0.5

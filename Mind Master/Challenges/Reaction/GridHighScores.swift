@@ -32,7 +32,6 @@ class GridHighScores: UIViewController {
             tv.separatorStyle = .none
             tv.backgroundColor = .clear
             tv.contentInset.top = 5
-            tv.contentInset.bottom = 5
             tv.register(GridHighscoreEntry.classForCoder(), forCellReuseIdentifier: "cell")
             tv.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(tv)
@@ -66,7 +65,7 @@ extension GridHighScores: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 || tableView.numberOfSections == 1 {
-            return challenge.maxIterations - challenge.minIterations + 1
+            return challenge.MAX_ITERATIONS - challenge.MIN_ITERATIONS + 1
         } else{
             return 1
         }
@@ -84,7 +83,7 @@ extension GridHighScores: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! GridHighscoreEntry
         
         if indexPath.section == 1 || tableView.numberOfSections == 1 {
-            let index = (challenge.minIterations + indexPath.row) * 5
+            let index = (challenge.MIN_ITERATIONS + indexPath.row) * 5
             cell.titleLabel.text = "\(index) Iterations:"
             if let record = PlayerRecord.current.gridRecord[index] {
                 cell.valueLabel.text = String(format: "%.3fs / tap", record / Double(index))

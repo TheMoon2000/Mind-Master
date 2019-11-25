@@ -48,8 +48,8 @@ class MainMenu: UIViewController {
             topBanner.contentView.addSubview(label)
             
             label.centerXAnchor.constraint(equalTo: topBanner.safeAreaLayoutGuide.centerXAnchor).isActive = true
-            label.centerYAnchor.constraint(equalTo: topBanner.centerYAnchor, constant: 15).isActive = true
-            label.bottomAnchor.constraint(equalTo: topBanner.bottomAnchor, constant: -28).isActive = true
+            label.centerYAnchor.constraint(equalTo: topBanner.centerYAnchor, constant: 14).isActive = true
+            label.bottomAnchor.constraint(equalTo: topBanner.bottomAnchor, constant: -25).isActive = true
             
             return label
         }()
@@ -61,7 +61,7 @@ class MainMenu: UIViewController {
             tv.tableFooterView = UIView()
             tv.separatorStyle = .none
             tv.backgroundColor = .clear
-            tv.contentInset.top = 5 + topBanner.frame.maxY
+            tv.contentInset.top = topBanner.frame.maxY
             tv.contentInset.bottom = 5
             tv.register(ChallengeTypeCell.classForCoder(), forCellReuseIdentifier: "cell")
             tv.delegate = self

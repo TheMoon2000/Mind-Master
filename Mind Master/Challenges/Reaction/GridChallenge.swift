@@ -25,8 +25,8 @@ class GridChallenge: UIViewController {
     private var countdownPlate: UIView!
     private var countdownDigit: UILabel!
     
-    let minIterations = 2
-    let maxIterations = 30
+    let MIN_ITERATIONS = 2
+    let MAX_ITERATIONS = 30
     
     // Game variables
     var gameTimer: Timer?
@@ -88,16 +88,15 @@ class GridChallenge: UIViewController {
             slider.maximumTrackTintColor = .clear
             slider.minimumTrackTintColor = .clear
             slider.thumbTintColor = AppColors.reaction
-            slider.maximumValue = Float(maxIterations)
-            slider.minimumValue = Float(minIterations)
+            slider.maximumValue = Float(MAX_ITERATIONS)
+            slider.minimumValue = Float(MIN_ITERATIONS)
             slider.value = Float(PlayerRecord.current.gridIterations / 5)
-            slider.value = 0
             
             slider.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(slider)
             
-            slider.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 28).isActive = true
-            slider.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -28).isActive = true
+            slider.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 30).isActive = true
+            slider.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
             slider.topAnchor.constraint(equalTo: sliderPrompt.bottomAnchor, constant: 10).isActive = true
                 
             slider.addTarget(self, action: #selector(sliderChanged), for: .valueChanged)
@@ -125,9 +124,7 @@ class GridChallenge: UIViewController {
             grid.topAnchor.constraint(greaterThanOrEqualTo: slider.bottomAnchor, constant: 15).isActive = true
                         
             grid.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-            let ratio = grid.widthAnchor.constraint(equalTo: grid.heightAnchor, multiplier: 1.0)
-            ratio.priority = .defaultHigh
-            ratio.isActive = true
+            grid.widthAnchor.constraint(equalTo: grid.heightAnchor, multiplier: 1.0).isActive = true
             
             let h = grid.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: 10)
             h.priority = .defaultHigh
@@ -184,7 +181,7 @@ class GridChallenge: UIViewController {
             view.addSubview(button)
             
             button.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-            button.topAnchor.constraint(greaterThanOrEqualTo: grid.bottomAnchor, constant: 30).isActive = true
+            button.topAnchor.constraint(greaterThanOrEqualTo: grid.bottomAnchor, constant: 20).isActive = true
             button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -28).isActive = true
             button.heightAnchor.constraint(equalToConstant: 50).isActive = true
             button.widthAnchor.constraint(equalToConstant: 225).isActive = true
@@ -197,14 +194,16 @@ class GridChallenge: UIViewController {
         countdownPlate = {
             let plate = UIView()
             plate.isHidden = true
-            plate.backgroundColor = AppColors.subview
+            plate.backgroundColor = AppColors.card
             plate.layer.borderColor = UIColor.gray.cgColor
-            plate.layer.cornerRadius = 50
+            plate.layer.cornerRadius = 45
+            plate.layer.borderColor = AppColors.line.cgColor
+            plate.layer.borderWidth = 1
             plate.applyMildShadow()
             plate.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(plate)
             
-            plate.widthAnchor.constraint(equalToConstant: 100).isActive = true
+            plate.widthAnchor.constraint(equalToConstant: 90).isActive = true
             plate.heightAnchor.constraint(equalTo: plate.widthAnchor).isActive = true
             plate.centerXAnchor.constraint(equalTo: grid.centerXAnchor).isActive = true
             plate.centerYAnchor.constraint(equalTo: grid.centerYAnchor).isActive = true
@@ -214,7 +213,7 @@ class GridChallenge: UIViewController {
         
         countdownDigit = {
             let label = UILabel()
-            label.font = .systemFont(ofSize: 36, weight: .medium)
+            label.font = .systemFont(ofSize: 35, weight: .medium)
             label.textAlignment = .center
             label.textColor = AppColors.label
             label.translatesAutoresizingMaskIntoConstraints = false
@@ -282,10 +281,11 @@ class GridChallenge: UIViewController {
             ticks.topAnchor.constraint(equalTo: slider.topAnchor).isActive = true
             ticks.bottomAnchor.constraint(equalTo: slider.bottomAnchor).isActive = true
             
-            let segmentCount = CGFloat(maxIterations - minIterations)
+            let segmentCount = CGFloat(MAX_ITERATIONS - MIN_ITERATIONS)
+            slider.layoutIfNeeded()
             thumbWidth = slider.thumbRect(
                 forBounds: slider.bounds,
-                trackRect: slider.trackRect(forBounds: slider.bounds), value: 0).width - 3
+                trackRect: slider.trackRect(forBounds: slider.bounds), value: 0).width
             
             let track = UIView()
             track.backgroundColor = AppColors.line
@@ -293,10 +293,10 @@ class GridChallenge: UIViewController {
             ticks.addSubview(track)
             
             track.heightAnchor.constraint(equalToConstant: 2).isActive = true
-            track.leftAnchor.constraint(equalTo: slider.leftAnchor,
-                                        constant: thumbWidth / 2).isActive = true
-            track.rightAnchor.constraint(equalTo: slider.rightAnchor,
-                                         constant: -thumbWidth / 2).isActive = true
+            track.leftAnchor.constraint(equalTo: slider.leftAnchor/*,
+                                        constant: thumbWidth / 2*/).isActive = true
+            track.rightAnchor.constraint(equalTo: slider.rightAnchor/*,
+                                         constant: -thumbWidth / 2*/).isActive = true
             track.centerYAnchor.constraint(equalTo: slider.centerYAnchor).isActive = true
             
             // Ticks
@@ -314,7 +314,7 @@ class GridChallenge: UIViewController {
                 return tick
             }
             
-            for i in 0...(maxIterations - minIterations) {
+            for i in 0...(MAX_ITERATIONS - MIN_ITERATIONS) {
                 let tickmark = makeTickmark()
                 
                 
@@ -343,11 +343,11 @@ class GridChallenge: UIViewController {
     
     @objc private func sliderChanged() {
         
-        let halfThumb = thumbWidth / 2 / slider.frame.width * CGFloat(maxIterations - minIterations)
+        // let halfThumb = thumbWidth / 2 / slider.frame.width * CGFloat(MAX_ITERATIONS - MIN_ITERATIONS)
         
         // Note: we need to recalculate the actual slider value as appeared to the user, because our custom track is narrower than the default track.
-        let apparentSliderValue = max(0, CGFloat(slider.value) - halfThumb) * slider.frame.width / (slider.frame.width - thumbWidth)
-                
+        let apparentSliderValue = slider.value // max(0, CGFloat(slider.value) - halfThumb) * slider.frame.width / (slider.frame.width - 2 * halfThumb)
+                        
         slider.value = round(Float(apparentSliderValue))
         if slider.value != currentValue {
             currentValue = slider.value
@@ -501,7 +501,7 @@ class GridChallenge: UIViewController {
     @objc private func menu() {
         let alert = UIAlertController()
         alert.view.tintColor = AppColors.reaction
-        alert.addAction(.init(title: "View Highscores", style: .default, handler: { _ in
+        alert.addAction(.init(title: "High Scores", style: .default, handler: { _ in
             let hs = GridHighScores(parent: self)
             self.navigationController?.pushViewController(hs, animated: true)
         }))

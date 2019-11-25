@@ -30,7 +30,7 @@ class ReactionTimeChallenge: UIViewController {
         
         tapArea = {
             let button = UIButton(type: .custom)
-            button.backgroundColor = AppColors.tapOff
+            button.backgroundColor = AppColors.tapOff.withAlphaComponent(0.8)
             button.tintColor = AppColors.label
             button.layer.cornerRadius = 8
             button.applyMildShadow()
@@ -82,7 +82,7 @@ class ReactionTimeChallenge: UIViewController {
             UISelectionFeedbackGenerator().selectionChanged()
             let randomTime = Double.random(in: 3.0...8.0)
             let timer = Timer.init(fire: Date(timeIntervalSinceNow: randomTime), interval: 0, repeats: false) { timer in
-                self.tapArea.backgroundColor = AppColors.reaction
+                self.tapArea.backgroundColor = AppColors.reaction.withAlphaComponent(0.8)
                 self.tapArea.setTitle(self.pressTitle, for: .normal)
                 self.pressTime = Date.timeIntervalSinceReferenceDate
             }
@@ -118,7 +118,7 @@ class ReactionTimeChallenge: UIViewController {
         
         tapArea.setTitle(startTitle, for: .normal)
         UIView.animate(withDuration: 0.1) {
-            self.tapArea.backgroundColor = AppColors.tapOff
+            self.tapArea.backgroundColor = AppColors.tapOff.withAlphaComponent(0.8)
         }
     }
 

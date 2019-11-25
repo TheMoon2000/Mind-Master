@@ -11,18 +11,25 @@ import BonMot
 
 class MemoryChallenge: UIViewController {
     
+    let MAX_ITEMS = 30
+    let MIN_ITEMS = 4
+    
     private var startView: UIView!
     private var welcomeMessage: UILabel!
     private var numberOfItemsLabel: UILabel!
     private var numberOfItems: UILabel!
     private var numberOfItemsSlider: UISlider!
+    private var numberOfItemsSliderTrack: UIView!
+    private var thumbWidth: CGFloat = 0
     private var numberOfItemsPrompt: UILabel!
     private var delayPerItemLabel: UILabel!
     private var delayPerItem: UILabel!
     private var delayPerItemSlider: UISlider!
     private var delayPerItemPrompt: UILabel!
-    private var testType: UISegmentedControl!
+    private var testTypePrompt: UILabel!
+    private var testType: UIButton!
     private var beginButton: UIButton!
+    
     
     private var countdownView: UIView!
     private var countdownTitle: UILabel!
@@ -32,10 +39,58 @@ class MemoryChallenge: UIViewController {
     private var countdownFrom = 3
     private var countdownTimer: Timer?
     
-    private var digitView: UIView!
+    
+    private var digitDisplayView: UIView!
+    private var displayTitle: UILabel!
+    private var displaySubtitle: UILabel!
+    private var displayedDigit: UILabel!
+    private var displayedColor: UIView!
+    private var displayTimeRemaining: UIProgressView!
+    private var displayProgressLabel: UILabel!
+    private var displayProgress: UIProgressView!
+    
+    
+    /// The list of correct answers.
+    private var recallList = [Any]()
+    
+    /// The indices of the correct answers (0 = top left, 1 = top right, 2 = bottom left, 3 = bottom right).
+    private var correctIndices = [Int]()
+    
     private var recallView: UIView!
+    private var recallTitle: UILabel!
+    private var recallSubtitle: UILabel!
+    private var recallIndexLabel: UILabel!
+    private var recallItemsContainer: UIView!
+    private var recallChoices = [UIButton]()
+    private var completionLabel: UILabel!
+    private var completionProgress: UIProgressView!
+    private var recallBeginTime = Date()
+    
+    /// The four choices that were displayed to the user for each question.
+    private var recallOptions = [[Any]]()
+    
+    /// The indices that the user selected (0 = top left, 1 = top right, 2 = bottom left, 3 = bottom right).
+    private var userIndices = [Int]()
+    
+    
     private var resultView: UIView!
+    private var resultTitle: UILabel!
+    private var resultMessage: UILabel!
+    private var scorePrompt: UILabel!
+    private var score: UILabel!
+    private var recallScoreCaption: UILabel!
+    private var returnToMenu: UIButton!
+    
+    let TEST_NAMES = [1: "Digits", 2: "Letters", 3: "Digits and Letters", 4: "Colors"]
+    let DIGITS = (0...9).map { String($0) }
+    let LETTERS = (65...90).map { String(UnicodeScalar($0)!) }
+    let BOTH = Set(48...57).union(65...90).map { String(UnicodeScalar($0)) }
 
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+    
+    // MARK - UI setup
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -69,7 +124,7 @@ class MemoryChallenge: UIViewController {
             t.priority = .defaultHigh
             t.isActive = true
             
-            let b = v.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)
+            let b = v.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
             b.priority = .defaultHigh
             b.isActive = true
             
@@ -90,15 +145,36 @@ class MemoryChallenge: UIViewController {
             return v
         }()
         
+        func makeBlankView() -> UIView {
+            let v = UIView()
+            v.isHidden = true
+            v.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(v)
+            
+            v.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+            v.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+            v.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+            v.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            
+            return v
+        }
+        
+        digitDisplayView = makeBlankView()
+        recallView = makeBlankView()
+        resultView = makeBlankView()
+        
         setupStartView()
         setupCountdownView()
+        setupDigitDisplayView()
+        setupRecallView()
+        setupResultView()
     }
     
     private func setupStartView() {
         
         welcomeMessage = {
             let label = UILabel()
-            label.attributedText = "This test measures your ability to memorize a set of itmes in limited time. You will be scored based on the number of items, delay per item and your accuracy of recall.".styled(with: .textStyle)
+            label.attributedText = "This test measures your ability to memorize a set of items in limited time. You will be scored based on the number of items, delay per item and your accuracy of recall.".styled(with: .textStyle)
             label.textAlignment = .center
             label.numberOfLines = 10
             label.translatesAutoresizingMaskIntoConstraints = false
@@ -148,12 +224,15 @@ class MemoryChallenge: UIViewController {
         numberOfItemsSlider = {
             let slider = UISlider()
             slider.isContinuous = true
-            slider.minimumValue = 4
-            slider.maximumValue = 32
+            slider.minimumValue = Float(MIN_ITEMS)
+            slider.maximumValue = Float(MAX_ITEMS)
             slider.value = Float(PlayerRecord.current.memoryItemCount)
-            slider.maximumTrackTintColor = AppColors.disabled
+            slider.maximumTrackTintColor = .clear // AppColors.disabled
+            slider.minimumTrackTintColor = .clear
             slider.translatesAutoresizingMaskIntoConstraints = false
             startView.addSubview(slider)
+            
+            slider.layoutIfNeeded()
             
             slider.topAnchor.constraint(equalTo: numberOfItemsLabel.bottomAnchor, constant: 8).isActive = true
             slider.leftAnchor.constraint(equalTo: welcomeMessage.leftAnchor).isActive = true
@@ -162,6 +241,69 @@ class MemoryChallenge: UIViewController {
             slider.addTarget(self, action: #selector(numberOfItemsChanged(_:)), for: .valueChanged)
             
             return slider
+        }()
+        
+        numberOfItemsSliderTrack = {
+            let ticks = UIView()
+            ticks.translatesAutoresizingMaskIntoConstraints = false
+            startView.insertSubview(ticks, belowSubview: numberOfItemsSlider)
+            ticks.leftAnchor.constraint(equalTo: numberOfItemsSlider.leftAnchor).isActive = true
+            ticks.rightAnchor.constraint(equalTo: numberOfItemsSlider.rightAnchor).isActive = true
+            ticks.topAnchor.constraint(equalTo: numberOfItemsSlider.topAnchor).isActive = true
+            ticks.bottomAnchor.constraint(equalTo: numberOfItemsSlider.bottomAnchor).isActive = true
+            
+            let segmentCount = CGFloat(MAX_ITEMS - MIN_ITEMS)
+            thumbWidth = numberOfItemsSlider.thumbRect(
+                forBounds: numberOfItemsSlider.bounds,
+                trackRect: numberOfItemsSlider.trackRect(forBounds: numberOfItemsSlider.bounds), value: 0).width
+            
+            let track = UIView()
+            track.backgroundColor = AppColors.line
+            track.translatesAutoresizingMaskIntoConstraints = false
+            ticks.addSubview(track)
+            
+            track.heightAnchor.constraint(equalToConstant: 2).isActive = true
+            track.leftAnchor.constraint(equalTo: numberOfItemsSlider.leftAnchor).isActive = true
+            track.rightAnchor.constraint(equalTo: numberOfItemsSlider.rightAnchor).isActive = true
+            track.centerYAnchor.constraint(equalTo: numberOfItemsSlider.centerYAnchor).isActive = true
+            
+            // Ticks
+            
+            func makeTickmark() -> UIView {
+                let tick = UIView()
+                tick.backgroundColor = track.backgroundColor
+                tick.translatesAutoresizingMaskIntoConstraints = false
+                ticks.addSubview(tick)
+                
+                tick.widthAnchor.constraint(equalToConstant: 2).isActive = true
+                tick.heightAnchor.constraint(equalToConstant: 12).isActive = true
+                tick.centerYAnchor.constraint(equalTo: numberOfItemsSlider.centerYAnchor).isActive = true
+                
+                return tick
+            }
+            
+            for i in 0...(MAX_ITEMS - MIN_ITEMS) {
+                let tickmark = makeTickmark()
+                
+                
+                //  Pseudocode:
+                //  tick.centerX = (slider.right - thumbWidth) * i / segmentCount + thumbWidth / 2
+                
+                
+                //  Note: The `multiplier` property cannot be zero, so we need to use a sufficiently small but positive number instead.
+                
+                NSLayoutConstraint(item: tickmark,
+                                   attribute: .centerX,
+                                   relatedBy: .equal,
+                                   toItem: ticks,
+                                   attribute: .right,
+                                   multiplier: max(0.000001,
+                                                   CGFloat(i) / segmentCount),
+                                   constant: -thumbWidth * CGFloat(i) / segmentCount + thumbWidth / 2).isActive = true
+                
+            }
+            
+            return ticks
         }()
         
         numberOfItemsPrompt = {
@@ -245,31 +387,53 @@ class MemoryChallenge: UIViewController {
             return label
         }()
         
+        testTypePrompt = {
+            let label = UILabel()
+            label.text = "Test category:"
+            label.textColor = AppColors.value
+            label.font = .systemFont(ofSize: 16, weight: .medium)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            startView.addSubview(label)
+            
+            label.leftAnchor.constraint(equalTo: delayPerItemPrompt.leftAnchor).isActive = true
+            label.topAnchor.constraint(equalTo: delayPerItemPrompt.bottomAnchor, constant: 15).isActive = true
+            
+            return label
+        }()
+        
         testType = {
-            let seg = UISegmentedControl(items: ["Digits", "Letters", "Both"])
-            seg.selectedSegmentIndex = PlayerRecord.current.memoryTestType
-            seg.translatesAutoresizingMaskIntoConstraints = false
-            startView.addSubview(seg)
+            let button = UIButton(type: .system)
+            button.setTitle(TEST_NAMES[PlayerRecord.current.memoryTestType.rawValue] ?? "Choose...", for: .normal)
+            button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+            button.tintColor = AppColors.emphasis
+            button.titleLabel?.textAlignment = .right
+            button.translatesAutoresizingMaskIntoConstraints = false
+            startView.addSubview(button)
             
-            seg.topAnchor.constraint(equalTo: delayPerItemPrompt.bottomAnchor, constant: 18).isActive = true
-            seg.leftAnchor.constraint(equalTo: welcomeMessage.leftAnchor).isActive = true
-            seg.rightAnchor.constraint(equalTo: welcomeMessage.rightAnchor).isActive = true
+            button.titleLabel?.rightAnchor.constraint(equalTo: delayPerItemPrompt.rightAnchor).isActive = true
+            button.titleLabel?.centerYAnchor.constraint(equalTo: testTypePrompt.centerYAnchor).isActive = true
             
-            seg.addTarget(self, action: #selector(testTypeChanged(_:)), for: .valueChanged)
+            button.addTarget(self, action: #selector(testTypeChanged(_:)), for: .touchUpInside)
             
-            return seg
+            return button
         }()
         
         beginButton = {
             let button = UIButton(type: .system)
             button.setTitle("Begin Test", for: .normal)
+            button.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
             button.layer.cornerRadius = 24
             button.layer.borderColor = AppColors.memory.cgColor
             button.layer.borderWidth = 1
             button.translatesAutoresizingMaskIntoConstraints = false
             startView.addSubview(button)
             
-            button.topAnchor.constraint(equalTo: testType.bottomAnchor, constant: 28).isActive = true
+            button.topAnchor.constraint(greaterThanOrEqualTo: testTypePrompt.bottomAnchor, constant: 10).isActive = true
+            
+            let b = button.bottomAnchor.constraint(equalTo: startView.bottomAnchor, constant: -10)
+            b.priority = .defaultHigh
+            b.isActive = true
+            
             button.widthAnchor.constraint(equalToConstant: 220).isActive = true
             button.heightAnchor.constraint(equalToConstant: 48).isActive = true
             button.centerXAnchor.constraint(equalTo: startView.centerXAnchor).isActive = true
@@ -301,7 +465,7 @@ class MemoryChallenge: UIViewController {
         
         countdownSubtitle = {
             let label = UILabel()
-            label.text = "Difficulty: \(PlayerRecord.current.memoryItemCount) items, \(PlayerRecord.current.delayPerItem)s per item"
+            label.text = "Difficulty: \(PlayerRecord.current.memoryItemCount) items, \(String(format: "%.1f", PlayerRecord.current.delayPerItem))s per item"
             label.textColor = AppColors.label
             label.textAlignment = .center
             label.font = .systemFont(ofSize: 15)
@@ -344,6 +508,398 @@ class MemoryChallenge: UIViewController {
         }()
     }
     
+    private func setupDigitDisplayView() {
+        
+        displayTitle = {
+            let label = UILabel()
+            label.text = "Test in Progress!"
+            label.textColor = AppColors.label
+            label.font = .systemFont(ofSize: 18, weight: .semibold)
+            label.textAlignment = .center
+            label.translatesAutoresizingMaskIntoConstraints = false
+            digitDisplayView.addSubview(label)
+            
+            label.centerXAnchor.constraint(equalTo: digitDisplayView.centerXAnchor).isActive = true
+            label.topAnchor.constraint(equalTo: digitDisplayView.topAnchor, constant: 55).isActive = true
+            
+            return label
+        }()
+        
+        displaySubtitle = {
+            let label = UILabel()
+            label.text = "Try to remember everything you see..."
+            label.textColor = AppColors.label
+            label.numberOfLines = 3
+            label.font = .systemFont(ofSize: 14)
+            label.textAlignment = .center
+            label.translatesAutoresizingMaskIntoConstraints = false
+            digitDisplayView.addSubview(label)
+            
+            label.leftAnchor.constraint(equalTo: digitDisplayView.leftAnchor, constant: 30).isActive = true
+            label.rightAnchor.constraint(equalTo: digitDisplayView.rightAnchor, constant: -30).isActive = true
+            label.topAnchor.constraint(equalTo: displayTitle.bottomAnchor, constant: 10).isActive = true
+            
+            return label
+        }()
+        
+        displayedDigit = {
+            let digit = UILabel()
+            digit.text = "0"
+            digit.isHidden = true
+            digit.font = .systemFont(ofSize: 120)
+            digit.textAlignment = .center
+            digit.translatesAutoresizingMaskIntoConstraints = false
+            digitDisplayView.addSubview(digit)
+            
+            digit.centerXAnchor.constraint(equalTo: digitDisplayView.centerXAnchor).isActive = true
+            digit.centerYAnchor.constraint(equalTo: digitDisplayView.centerYAnchor, constant: -20).isActive = true
+            
+            return digit
+        }()
+        
+        displayedColor = {
+            let v = UIView()
+            v.layer.borderColor = AppColors.line.cgColor
+            v.layer.cornerRadius = 5
+            v.isHidden = true
+            v.translatesAutoresizingMaskIntoConstraints = false
+            digitDisplayView.addSubview(v)
+            
+            v.bottomAnchor.constraint(equalTo: displayedDigit.bottomAnchor).isActive = true
+            v.widthAnchor.constraint(equalTo: v.heightAnchor).isActive = true
+            v.centerXAnchor.constraint(equalTo: digitDisplayView.centerXAnchor).isActive = true
+            v.heightAnchor.constraint(equalTo: displayedDigit.heightAnchor).isActive = true
+            
+            return v
+        }()
+        
+        displayTimeRemaining = {
+            let bar = UIProgressView()
+            bar.trackTintColor = AppColors.line
+            bar.progressTintColor = AppColors.lightControl
+            bar.translatesAutoresizingMaskIntoConstraints = false
+            digitDisplayView.addSubview(bar)
+            
+            bar.topAnchor.constraint(equalTo: displayedDigit.bottomAnchor, constant: 40).isActive = true
+            bar.widthAnchor.constraint(equalToConstant: 200).isActive = true
+            bar.centerXAnchor.constraint(equalTo: digitDisplayView.centerXAnchor).isActive = true
+            
+            return bar
+        }()
+        
+        displayProgress = {
+            let bar = UIProgressView()
+            bar.trackTintColor = AppColors.line
+            bar.progressTintColor = AppColors.memory
+            bar.translatesAutoresizingMaskIntoConstraints = false
+            digitDisplayView.addSubview(bar)
+            
+            bar.widthAnchor.constraint(equalToConstant: 210).isActive = true
+            bar.centerXAnchor.constraint(equalTo: digitDisplayView.centerXAnchor).isActive = true
+            bar.bottomAnchor.constraint(equalTo: digitDisplayView.bottomAnchor, constant: -32).isActive = true
+            
+            return bar
+        }()
+        
+        displayProgressLabel = {
+            let label = UILabel()
+            label.font = .systemFont(ofSize: 15)
+            label.textColor = AppColors.label
+            label.textAlignment = .center
+            label.translatesAutoresizingMaskIntoConstraints = false
+            digitDisplayView.addSubview(label)
+            
+            label.bottomAnchor.constraint(equalTo: displayProgress.topAnchor, constant: -12).isActive = true
+            label.centerXAnchor.constraint(equalTo: digitDisplayView.centerXAnchor).isActive = true
+            
+            return label
+        }()
+    }
+    
+    private func setupRecallView() {
+        
+        recallTitle = {
+            let label = UILabel()
+            label.font = .systemFont(ofSize: 18, weight: .medium)
+            label.text = "Recall Section"
+            label.textColor = AppColors.label
+            label.textAlignment = .center
+            label.translatesAutoresizingMaskIntoConstraints = false
+            recallView.addSubview(label)
+            
+            let t = label.topAnchor.constraint(equalTo: recallView.topAnchor, constant: 50)
+            t.priority = .defaultHigh
+            t.isActive = true
+            
+            label.topAnchor.constraint(greaterThanOrEqualTo: recallView.topAnchor, constant: 30).isActive = true
+            label.centerXAnchor.constraint(equalTo: recallView.centerXAnchor).isActive = true
+            
+            return label
+        }()
+        
+        recallSubtitle = {
+            let label = UILabel()
+            label.text = "Recall the items you have seen in order. There is no going back."
+            label.numberOfLines = 3
+            label.textAlignment = .center
+            label.font = .systemFont(ofSize: 14)
+            label.textColor = AppColors.value
+            label.translatesAutoresizingMaskIntoConstraints = false
+            recallView.addSubview(label)
+            
+            label.leftAnchor.constraint(equalTo: recallView.leftAnchor, constant: 50).isActive = true
+            label.rightAnchor.constraint(equalTo: recallView.rightAnchor, constant: -50).isActive = true
+            label.topAnchor.constraint(equalTo: recallTitle.bottomAnchor, constant: 12).isActive = true
+            
+            return label
+        }()
+        
+        completionProgress = {
+            let bar = UIProgressView()
+            bar.trackTintColor = AppColors.line
+            bar.progressTintColor = AppColors.memory
+            bar.translatesAutoresizingMaskIntoConstraints = false
+            recallView.addSubview(bar)
+            
+            bar.centerXAnchor.constraint(equalTo: recallView.centerXAnchor).isActive = true
+            bar.widthAnchor.constraint(lessThanOrEqualToConstant: 450).isActive = true
+            bar.bottomAnchor.constraint(equalTo: recallView.bottomAnchor, constant: -30).isActive = true
+            
+            let w = bar.leftAnchor.constraint(equalTo: recallView.leftAnchor, constant: 60)
+            w.priority = .defaultHigh
+            w.isActive = true
+            
+            return bar
+        }()
+        
+        completionLabel = {
+            let label = UILabel()
+            label.text = "Completion:"
+            label.textColor = AppColors.label
+            label.font = .systemFont(ofSize: 13)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            recallView.addSubview(label)
+            
+            label.leftAnchor.constraint(equalTo: completionProgress.leftAnchor).isActive = true
+            label.bottomAnchor.constraint(equalTo: completionProgress.topAnchor, constant: -6).isActive = true
+            
+            return label
+        }()
+        
+        recallItemsContainer = {
+            let v = UIView()
+            v.layer.borderWidth = 1
+            v.layer.borderColor = AppColors.line.cgColor
+            v.layer.cornerRadius = 5
+            v.clipsToBounds = true
+            v.translatesAutoresizingMaskIntoConstraints = false
+            recallView.addSubview(v)
+            
+            v.widthAnchor.constraint(equalTo: v.heightAnchor).isActive = true
+            v.centerXAnchor.constraint(equalTo: recallView.centerXAnchor).isActive = true
+            v.leftAnchor.constraint(greaterThanOrEqualTo: recallView.leftAnchor, constant: 55).isActive = true
+            v.widthAnchor.constraint(lessThanOrEqualToConstant: 600).isActive = true
+            v.bottomAnchor.constraint(lessThanOrEqualTo: completionLabel.topAnchor, constant: -20).isActive = true
+            
+            let centerY = v.centerYAnchor.constraint(equalTo: recallView.centerYAnchor, constant: 40)
+            centerY.priority = .defaultHigh
+            centerY.isActive = true
+            
+            let l = v.leftAnchor.constraint(equalTo: recallView.leftAnchor, constant: 55)
+            l.priority = .defaultHigh
+            l.isActive = true
+            
+            return v
+        }()
+        
+        for _ in 0..<4 {
+            let choice = UIButton(type: .system)
+            choice.titleLabel?.font = .systemFont(ofSize: 24)
+            // choice.tintColor = AppColors.value
+            choice.translatesAutoresizingMaskIntoConstraints = false
+            recallItemsContainer.addSubview(choice)
+            recallChoices.append(choice)
+            
+            choice.widthAnchor.constraint(equalTo: recallItemsContainer.widthAnchor, multiplier: 0.5).isActive = true
+            choice.heightAnchor.constraint(equalTo: choice.widthAnchor).isActive = true
+            
+            choice.addTarget(self, action: #selector(submitRecallResponse(_:)), for: .touchUpInside)
+        }
+        
+        recallChoices[0].leftAnchor.constraint(equalTo: recallItemsContainer.leftAnchor).isActive = true
+        recallChoices[0].topAnchor.constraint(equalTo: recallItemsContainer.topAnchor).isActive = true
+        
+        recallChoices[1].topAnchor.constraint(equalTo: recallItemsContainer.topAnchor).isActive = true
+        recallChoices[1].rightAnchor.constraint(equalTo: recallItemsContainer.rightAnchor).isActive = true
+        
+        recallChoices[2].leftAnchor.constraint(equalTo: recallItemsContainer.leftAnchor).isActive = true
+        recallChoices[2].bottomAnchor.constraint(equalTo: recallItemsContainer.bottomAnchor).isActive = true
+        
+        recallChoices[3].rightAnchor.constraint(equalTo: recallItemsContainer.rightAnchor).isActive = true
+        recallChoices[3].bottomAnchor.constraint(equalTo: recallItemsContainer.bottomAnchor).isActive = true
+        
+        recallIndexLabel = {
+            let label = UILabel()
+            label.textColor = AppColors.label
+            label.textAlignment = .center
+            label.text = "REPLACE ME"
+            label.translatesAutoresizingMaskIntoConstraints = false
+            recallView.addSubview(label)
+            
+            label.centerXAnchor.constraint(equalTo: recallView.centerXAnchor).isActive = true
+            label.bottomAnchor.constraint(equalTo: recallItemsContainer.topAnchor, constant: -20).isActive = true
+            label.topAnchor.constraint(greaterThanOrEqualTo: recallSubtitle.bottomAnchor, constant: 20).isActive = true
+            
+            return label
+        }()
+        
+        let _: UIView = {
+            let line = UIView()
+            line.backgroundColor = AppColors.line
+            line.translatesAutoresizingMaskIntoConstraints = false
+            recallItemsContainer.addSubview(line)
+            
+            line.widthAnchor.constraint(equalToConstant: 1).isActive = true
+            line.topAnchor.constraint(equalTo: recallItemsContainer.topAnchor).isActive = true
+            line.bottomAnchor.constraint(equalTo: recallItemsContainer.bottomAnchor).isActive = true
+            line.centerXAnchor.constraint(equalTo: recallItemsContainer.centerXAnchor).isActive = true
+            
+            return line
+        }()
+        
+        let _: UIView = {
+            let line = UIView()
+            line.backgroundColor = AppColors.line
+            line.translatesAutoresizingMaskIntoConstraints = false
+            recallItemsContainer.addSubview(line)
+            
+            line.heightAnchor.constraint(equalToConstant: 1).isActive = true
+            line.leftAnchor.constraint(equalTo: recallItemsContainer.leftAnchor).isActive = true
+            line.rightAnchor.constraint(equalTo: recallItemsContainer.rightAnchor).isActive = true
+            line.centerYAnchor.constraint(equalTo: recallItemsContainer.centerYAnchor).isActive = true
+            
+            return line
+        }()
+    }
+    
+    private func setupResultView() {
+        
+        /*
+         
+         private var resultTitle: UILabel!
+         private var resultMessage: UILabel!
+         private var scorePrompt: UILabel!
+         private var score: UILabel!
+         private var recallScoreCaption: UILabel!
+         private var returnToMenu: UIButton!
+         
+         */
+        
+        score = {
+            let label = UILabel()
+            label.textColor = AppColors.memory
+            label.font = .systemFont(ofSize: 60)
+            label.textAlignment = .center
+            label.translatesAutoresizingMaskIntoConstraints = false
+            resultView.addSubview(label)
+            
+            label.centerXAnchor.constraint(equalTo: resultView.centerXAnchor).isActive = true
+            label.centerYAnchor.constraint(equalTo: resultView.centerYAnchor).isActive = true
+            
+            return label
+        }()
+        
+        scorePrompt = {
+            let label = UILabel()
+            label.text = "Your score:"
+            label.textColor = AppColors.label
+            label.textAlignment = .center
+            label.translatesAutoresizingMaskIntoConstraints = false
+            resultView.addSubview(label)
+            
+            label.centerXAnchor.constraint(equalTo: resultView.centerXAnchor).isActive = true
+            label.bottomAnchor.constraint(equalTo: score.topAnchor, constant: -12).isActive = true
+            
+            return label
+        }()
+        
+        resultTitle = {
+            let label = UILabel()
+            label.font = .systemFont(ofSize: 24, weight: .medium)
+            label.textColor = AppColors.label
+            label.textAlignment = .center
+            label.numberOfLines = 3
+            label.translatesAutoresizingMaskIntoConstraints = false
+            resultView.addSubview(label)
+            
+            label.leftAnchor.constraint(equalTo: resultView.leftAnchor, constant: 40).isActive = true
+            label.rightAnchor.constraint(equalTo: resultView.rightAnchor, constant: -40).isActive = true
+            label.topAnchor.constraint(greaterThanOrEqualTo: resultView.topAnchor, constant: 15).isActive = true
+            
+            return label
+        }()
+        
+        resultMessage = {
+            let label = UILabel()
+            label.font = .systemFont(ofSize: 15)
+            label.textColor = AppColors.value
+            label.textAlignment = .center
+            label.translatesAutoresizingMaskIntoConstraints = false
+            resultView.addSubview(label)
+            
+            label.centerXAnchor.constraint(equalTo: resultView.centerXAnchor).isActive = true
+            label.topAnchor.constraint(equalTo: resultTitle.bottomAnchor, constant: 10).isActive = true
+            let b = label.bottomAnchor.constraint(equalTo: scorePrompt.topAnchor, constant: -80)
+            b.priority = .defaultHigh
+            b.isActive = true
+            label.bottomAnchor.constraint(lessThanOrEqualTo: scorePrompt.topAnchor, constant: -15).isActive = true
+            
+            return label
+        }()
+        
+        recallScoreCaption = {
+            let label = UILabel()
+            label.textColor = AppColors.emphasis
+            label.textAlignment = .center
+            label.translatesAutoresizingMaskIntoConstraints = false
+            resultView.addSubview(label)
+            
+            label.centerXAnchor.constraint(equalTo: resultView.centerXAnchor).isActive = true
+            let h = label.topAnchor.constraint(equalTo: score.bottomAnchor, constant: 25)
+            h.priority = .defaultHigh
+            h.isActive = true
+            label.topAnchor.constraint(greaterThanOrEqualTo: score.bottomAnchor, constant: 5).isActive = true
+            
+            return label
+        }()
+        
+        returnToMenu = {
+            let button = UIButton(type: .system)
+            button.setTitle("Return to Menu", for: .normal)
+            button.titleLabel?.font = .systemFont(ofSize: 17)
+            button.layer.cornerRadius = 24
+            button.layer.borderColor = AppColors.memory.cgColor
+            button.layer.borderWidth = 1
+            button.translatesAutoresizingMaskIntoConstraints = false
+            resultView.addSubview(button)
+            
+            button.centerXAnchor.constraint(equalTo: resultView.centerXAnchor).isActive = true
+            button.heightAnchor.constraint(equalToConstant: 48).isActive = true
+            button.widthAnchor.constraint(equalToConstant: 220).isActive = true
+            let t = button.topAnchor.constraint(equalTo: recallScoreCaption.bottomAnchor, constant: 60)
+            t.priority = .defaultHigh
+            t.isActive = true
+            button.topAnchor.constraint(greaterThanOrEqualTo: recallScoreCaption.bottomAnchor, constant: 10).isActive = true
+            
+            button.bottomAnchor.constraint(lessThanOrEqualTo: resultView.bottomAnchor, constant: -20).isActive = true
+            
+            button.addTarget(self, action: #selector(backToMenu(_:)), for: .touchUpInside)
+            
+            return button
+        }()
+    }
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -351,13 +907,17 @@ class MemoryChallenge: UIViewController {
     }
 }
 
-// MARK: - Handles events for start view
+// MARK: - Gameplay events
 extension MemoryChallenge {
     
-    @objc private func numberOfItemsChanged(_ sender: UISlider) {
-        let newValue = Int(round(sender.value))
-        numberOfItems.text = newValue.description
-        PlayerRecord.current.memoryItemCount = newValue
+    @objc private func numberOfItemsChanged(_ slider: UISlider) {
+        // let offset = thumbWidth / 2 / slider.frame.width * CGFloat(MAX_ITEMS - MIN_ITEMS)
+        slider.value = round(slider.value)
+        if Int(slider.value) != PlayerRecord.current.memoryItemCount {
+            numberOfItems.text = Int(slider.value).description
+            PlayerRecord.current.memoryItemCount = Int(slider.value)
+            UISelectionFeedbackGenerator().selectionChanged()
+        }
     }
     
     @objc private func delayChanged(_ sender: UISlider) {
@@ -366,24 +926,259 @@ extension MemoryChallenge {
         PlayerRecord.current.delayPerItem = Double(newValue)
     }
     
-    @objc private func testTypeChanged(_ sender: UISegmentedControl) {
-        UISelectionFeedbackGenerator().selectionChanged()
-        PlayerRecord.current.memoryTestType = sender.selectedSegmentIndex
+    @objc private func testTypeChanged(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Select test category", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(.init(title: "Cancel", style: .cancel))
+        
+        for (value, name) in TEST_NAMES {
+            alert.addAction(.init(title: name, style: .default, handler: { _ in
+                PlayerRecord.current.memoryTestType = .init(rawValue: value)
+                self.testType.setTitle(name, for: .normal)
+            }))
+        }
+        
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceView = testType
+            popoverController.sourceRect = testType.frame
+        }
+        
+        present(alert, animated: true)
     }
     
+    
     @objc private func beginTest(_ sender: UIButton) {
+        
+        guard TEST_NAMES[PlayerRecord.current.memoryTestType.rawValue] != nil else {
+            let alert = UIAlertController(title: "You must choose a test category!", message: nil, preferredStyle: .alert)
+            alert.addAction(.init(title: "OK", style: .cancel))
+            present(alert, animated: true)
+            return
+        }
+                
         let timer = Timer(timeInterval: 1, repeats: true) { timer in
             if self.countdownFrom > 0 {
                 self.countdownFrom -= 1
                 self.countdownDigit.text = self.countdownFrom.description
             } else {
                 timer.invalidate()
+                self.countdownView.isHidden = true
+                self.digitDisplayView.isHidden = false
+                self.generateNextItem()
             }
         }
+        
         RunLoop.main.add(timer, forMode: .default)
         countdownTimer = timer
         
         startView.isHidden = true
         countdownView.isHidden = false
     }
+    
+    private func generateNextItem() {
+        let nextItem: Any
+        switch PlayerRecord.current.memoryTestType {
+        case .digits:
+            nextItem = DIGITS.randomElement()!
+        case .letters:
+            nextItem = LETTERS.randomElement()!
+        case [.digits, .letters]:
+            nextItem = BOTH.randomElement()!
+        case .colors:
+            let r = CGFloat(Int.random(in: 0...245)) / 255
+            let g = CGFloat(Int.random(in: 0...245)) / 255
+            let b = CGFloat(Int.random(in: 0...245)) / 255
+            
+            nextItem = UIColor(red: r, green: g, blue: b, alpha: 1)
+        default:
+            preconditionFailure()
+        }
+        
+        correctIndices.append(Int.random(in: 0..<4))
+        recallList.append(nextItem)
+        
+        // Display this digit to the player
+        
+        if let nextChar = nextItem as? String {
+            displayedDigit.isHidden = false
+            displayedColor.isHidden = true
+            displayedDigit.text = nextChar
+        } else if let nextColor = nextItem as? UIColor {
+            displayedColor.isHidden = false
+            displayedDigit.isHidden = true
+            displayedColor.backgroundColor = nextColor
+        }
+        
+        displayProgressLabel.text = "Item \(recallList.count) of \(PlayerRecord.current.memoryItemCount)"
+        displayProgress.setProgress(Float(recallList.count) / Float(PlayerRecord.current.memoryItemCount), animated: true)
+                
+        
+        let beginDisplayTime = Date()
+        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
+            let elapsed = Date().timeIntervalSince(beginDisplayTime)
+            self.displayTimeRemaining.progress = Float(elapsed / PlayerRecord.current.delayPerItem)
+            if elapsed > PlayerRecord.current.delayPerItem {
+                timer.invalidate()
+                self.displayTimeRemaining.setProgress(0, animated: false)
+                if PlayerRecord.current.memoryItemCount > self.recallList.count {
+                    self.generateNextItem()
+                } else {
+                    self.digitDisplayView.isHidden = true
+                    self.recallView.isHidden = false
+                    self.completionProgress.progress = 0
+                    self.displayRecallScreen()
+                    self.recallBeginTime = Date()
+                }
+            }
+        }
+        
+    }
+    
+    private func displayRecallScreen() {
+        let recallIndex = Int(userIndices.count)
+        let recallItem = recallList[recallIndex]
+        let correctIndex = correctIndices[recallIndex]
+        recallIndexLabel.text = "Item \(recallIndex + 1) of \(recallList.count)"
+        
+        var answerOptions = [Any]()
+        
+        if let recallColor = recallItem as? UIColor {
+            let components = recallColor.cgColor.components!
+           
+            UIView.animate(withDuration: 0.15) {
+                self.recallChoices[correctIndex].backgroundColor = recallColor
+            }
+            var usedColors = Set<[Int]>()
+            usedColors.insert([0, 0, 0])
+            
+            let granularity: CGFloat = 20
+            let maxOffset = 4
+            
+            let rMinOffset = -min(Int(components[0] * 255 / granularity), maxOffset)
+            let rMaxOffset = min(Int((1 - components[0]) * 255 / granularity), maxOffset)
+            let gMinOffset = -min(Int(components[1] * 255 / granularity), maxOffset)
+            let gMaxOffset = min(Int((1 - components[1]) * 255 / granularity), maxOffset)
+            let bMinOffset = -min(Int(components[2] * 255 / granularity), maxOffset)
+            let bMaxOffset = min(Int((1 - components[2]) * 255 / granularity), maxOffset)
+            
+            for index in 0..<4 {
+                if index == correctIndex {
+                    answerOptions.append(recallColor)
+                    continue
+                }
+                
+                var offsetCombo = [0, 0, 0]
+                while usedColors.contains(offsetCombo) {
+                    let r = Int.random(in: rMinOffset...rMaxOffset)
+                    let g = Int.random(in: gMinOffset...gMaxOffset)
+                    let b = Int.random(in: bMinOffset...bMaxOffset)
+                    offsetCombo = [r, g, b]
+                }
+                
+                usedColors.insert(offsetCombo)
+                
+                let r = CGFloat(offsetCombo[0]) * granularity / 255 + components[0]
+                let g = CGFloat(offsetCombo[1]) * granularity / 255 + components[1]
+                let b = CGFloat(offsetCombo[2]) * granularity / 255 + components[2]
+                
+                let randomColor = UIColor(red: r, green: g, blue: b, alpha: 1)
+                
+                UIView.animate(withDuration: 0.15) {
+                    self.recallChoices[index].backgroundColor = randomColor
+                }
+                answerOptions.append(randomColor)
+            }
+        } else if let recallLetter = recallItem as? String {
+            
+            var usedCharacters = Set<String>()
+            self.recallChoices[correctIndex].setTitle(recallLetter, for: .normal)
+            usedCharacters.insert(recallLetter)
+            
+            var possibilities = Set([DIGITS, LETTERS, BOTH][PlayerRecord.current.memoryTestType.rawValue - 1])
+            possibilities.remove(recallLetter)
+            
+            for i in 0..<recallChoices.count {
+                if i == correctIndex {
+                    answerOptions.append(recallLetter)
+                    continue
+                }
+                let randomLetter = possibilities.randomElement()!
+                answerOptions.append(randomLetter)
+                UIView.performWithoutAnimation {
+                    self.recallChoices[i].setTitle(randomLetter, for: .normal)
+                }
+            }
+        }
+        
+        recallOptions.append(answerOptions)
+    }
+    
+    @objc private func submitButtonPressed(_ sender: UIButton) {
+        if sender.backgroundColor == nil {
+            sender.backgroundColor = AppColors.line
+        }
+    }
+    
+    @objc private func submitButtonLifted(_ sender: UIButton) {
+        if sender.backgroundColor == AppColors.line {
+            UIView.animate(withDuration: 0.15) {
+                sender.backgroundColor = nil
+            }
+        }
+    }
+    
+    @objc private func submitRecallResponse(_ sender: UIButton) {
+        let userIndex = recallChoices.firstIndex(of: sender)!
+        userIndices.append(userIndex)
+        completionProgress.progress = Float(userIndices.count) / Float(recallList.count)
+        
+        if userIndices.count < recallList.count {
+            displayRecallScreen()
+        } else {
+            recallView.isHidden = true
+            resultView.isHidden = false
+            
+            var correctCount = 0
+            for i in 0..<correctIndices.count {
+                if correctIndices[i] == userIndices[i] {
+                    correctCount += 1
+                }
+            }
+            
+            let correctPercentage = Double(correctCount) / Double(correctIndices.count)
+            let rounded = Int(round(correctPercentage * 100))
+            if correctPercentage == 1.0 {
+                resultTitle.text = "Perfect! 100% Correct!"
+            } else if correctPercentage >= 0.9 {
+                resultTitle.text = "Excellent! \(rounded)% Correct!"
+            } else if correctPercentage >= 0.8 {
+                resultTitle.text = "Good job! You got \(rounded)% correct."
+            } else if correctPercentage >= 0.7 {
+                resultTitle.text = "Satisfactory - You got \(rounded)% correct."
+            } else {
+                resultTitle.text = "Oops. \(rounded)% was not a pass."
+            }
+            
+            let totalDuration = Date().timeIntervalSince(recallBeginTime)
+            resultMessage.text = "Average speed: \(String(format: "%.2f", totalDuration / Double(recallList.count)))s / response"
+            
+            score.text = "\(correctCount)/\(correctIndices.count)"
+            recallScoreCaption.text = "Recall type: \(TEST_NAMES[PlayerRecord.current.memoryTestType.rawValue] ?? "[Error]")"
+        }
+    }
+    
+    @objc private func backToMenu(_ sender: UIButton) {
+        recallList.removeAll()
+        recallOptions.removeAll()
+        userIndices.removeAll()
+        correctIndices.removeAll()
+        countdownTimer?.invalidate()
+        
+        for button in recallChoices {
+            button.backgroundColor = nil
+        }
+        
+        startView.isHidden = false
+        resultView.isHidden = true
+    }
+    
 }

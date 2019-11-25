@@ -24,6 +24,10 @@
 		CCE2B273238853BD0092A19F /* GridChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE2B272238853BD0092A19F /* GridChallenge.swift */; };
 		CCF92C60238897A5002BBE09 /* GridHighScores.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF92C5F238897A5002BBE09 /* GridHighScores.swift */; };
 		CCF92C62238898F8002BBE09 /* GridHighscoreEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF92C61238898F8002BBE09 /* GridHighscoreEntry.swift */; };
+		CCF92C642388B09A002BBE09 /* ColorDodgeChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF92C632388B09A002BBE09 /* ColorDodgeChallenge.swift */; };
+		CCF92C662388B0B1002BBE09 /* DodgeTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF92C652388B0B1002BBE09 /* DodgeTrack.swift */; };
+		CCF92C6A238909C7002BBE09 /* FallingColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF92C69238909C7002BBE09 /* FallingColor.swift */; };
+		CCF92C6C238913BC002BBE09 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF92C6B238913BC002BBE09 /* Queue.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +53,10 @@
 		CCE2B272238853BD0092A19F /* GridChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridChallenge.swift; sourceTree = "<group>"; };
 		CCF92C5F238897A5002BBE09 /* GridHighScores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridHighScores.swift; sourceTree = "<group>"; };
 		CCF92C61238898F8002BBE09 /* GridHighscoreEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridHighscoreEntry.swift; sourceTree = "<group>"; };
+		CCF92C632388B09A002BBE09 /* ColorDodgeChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorDodgeChallenge.swift; sourceTree = "<group>"; };
+		CCF92C652388B0B1002BBE09 /* DodgeTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DodgeTrack.swift; sourceTree = "<group>"; };
+		CCF92C69238909C7002BBE09 /* FallingColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallingColor.swift; sourceTree = "<group>"; };
+		CCF92C6B238913BC002BBE09 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		F032401D1D6315483F2A1196 /* Pods-Mind Master.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mind Master.release.xcconfig"; path = "Target Support Files/Pods-Mind Master/Pods-Mind Master.release.xcconfig"; sourceTree = "<group>"; };
 		F6CF57ECD88248BDB3B2EFD7 /* Pods-Mind Master.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mind Master.debug.xcconfig"; path = "Target Support Files/Pods-Mind Master/Pods-Mind Master.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,6 +116,7 @@
 				CC5FB2DE237602D20069AEC1 /* PlayerRecord.swift */,
 				CC5FB2D12375EBC10069AEC1 /* TintedNavController.swift */,
 				CC5FB2BC2375E7C90069AEC1 /* MainMenu.swift */,
+				CCF92C6B238913BC002BBE09 /* Queue.swift */,
 				CC5FB2DD237602900069AEC1 /* Objective-C */,
 				CC5FB2D32375F69B0069AEC1 /* Challenges */,
 				CC5FB2CC2375E7FD0069AEC1 /* Cells */,
@@ -155,6 +164,9 @@
 				CC5FB2D42375F6B10069AEC1 /* ReactionTimeChallenge.swift */,
 				CCE2B272238853BD0092A19F /* GridChallenge.swift */,
 				CCF92C5F238897A5002BBE09 /* GridHighScores.swift */,
+				CCF92C632388B09A002BBE09 /* ColorDodgeChallenge.swift */,
+				CCF92C652388B0B1002BBE09 /* DodgeTrack.swift */,
+				CCF92C69238909C7002BBE09 /* FallingColor.swift */,
 			);
 			path = Reaction;
 			sourceTree = "<group>";
@@ -285,17 +297,21 @@
 				CC5FB2DF237602D20069AEC1 /* PlayerRecord.swift in Sources */,
 				CC5FB2BD2375E7C90069AEC1 /* MainMenu.swift in Sources */,
 				CC7195632387D1C80018B6F6 /* ReactionChallengeMenu.swift in Sources */,
+				CCF92C662388B0B1002BBE09 /* DodgeTrack.swift in Sources */,
 				CCE2B273238853BD0092A19F /* GridChallenge.swift in Sources */,
 				CC5FB2B92375E7C90069AEC1 /* AppDelegate.swift in Sources */,
 				CC5FB2CE2375E8160069AEC1 /* ChallengeTypeCell.swift in Sources */,
+				CCF92C6C238913BC002BBE09 /* Queue.swift in Sources */,
 				CC5FB2D22375EBC10069AEC1 /* TintedNavController.swift in Sources */,
 				CCF92C62238898F8002BBE09 /* GridHighscoreEntry.swift in Sources */,
 				CC5FB2D02375E8530069AEC1 /* Global Constants.swift in Sources */,
 				CC5FB2E12376273D0069AEC1 /* MemoryChallenge.swift in Sources */,
 				CC5FB2DC2376028A0069AEC1 /* NSData+AESCrypt.m in Sources */,
+				CCF92C6A238909C7002BBE09 /* FallingColor.swift in Sources */,
 				CC5FB2D52375F6B10069AEC1 /* ReactionTimeChallenge.swift in Sources */,
 				CC5FB2DB2376028A0069AEC1 /* NSString+AESCrypt.m in Sources */,
 				CCF92C60238897A5002BBE09 /* GridHighScores.swift in Sources */,
+				CCF92C642388B09A002BBE09 /* ColorDodgeChallenge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
