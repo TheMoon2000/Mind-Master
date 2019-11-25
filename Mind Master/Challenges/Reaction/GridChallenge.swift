@@ -413,7 +413,7 @@ class GridChallenge: UIViewController {
         
         let chosenIndex = Int.random(in: 0...3)
         for i in 0..<4 {
-            UIView.animate(withDuration: 0.15) {
+            UIView.animate(withDuration: 0.1) {
                 self.buttons[i].backgroundColor = i == chosenIndex ? AppColors.reaction : AppColors.disabled
             }
         }

@@ -1175,6 +1175,7 @@ extension MemoryChallenge {
         
         for button in recallChoices {
             button.backgroundColor = nil
+            button.setTitle(nil, for: .normal)
         }
         
         startView.isHidden = false
