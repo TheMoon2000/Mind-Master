@@ -1,4 +1,4 @@
-# mind-master
+# Mind Master
 A collection of challenges (games) that can boost one's cognitive capacity. It's the 2nd generation of “Brain Trainer.”
 
 ## Current Challenges
@@ -22,6 +22,8 @@ A collection of challenges (games) that can boost one's cognitive capacity. It's
     - Letters
     - Both
     - Colors. This is perhaps the most uncommon type of recall challenge. We're used to memorizing quantitative information like digits or sequences of letters (e.g. email addresses, phone numbers, etc.) but we rarely memorize something that cannot be described by words. This is perhaps what makes color memorization **more difficult** than the other challenges. Like the other test categories, you will first view a sequence of colors, then asked to recall the colors you've seen from a list of 4 options. The options are similar (although guaranteed all different and differentiated by a certain “granularity” that I configured)! Below is an example of a color displayed during the memorization stage and the same color requested during the recall stage.
+    
+    <br>
     
     <img src="Screenshots/memory-color.png" width=240>
     <img src="Screenshots/recall.png" width=240>
