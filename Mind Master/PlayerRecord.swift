@@ -54,7 +54,7 @@ class PlayerRecord: NSObject {
         memoryMaxLength = dictionary["memoryMaxLength"]?.int
         memoryItemCount = dictionary["memoryItemCount"]?.int ?? 8
         delayPerItem = dictionary["memoryDelay"]?.double ?? 1.0
-        memoryTestType = .init(rawValue: dictionary["memoryTestType"]?.int ?? 1)
+        memoryTestType = RecallType.init(rawValue: dictionary["memoryTestType"]?.int ?? 1) ?? .digits
     }
     
     var encodedJSON: JSON {

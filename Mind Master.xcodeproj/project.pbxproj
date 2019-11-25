@@ -23,6 +23,8 @@
 		CC7195632387D1C80018B6F6 /* ReactionChallengeMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7195622387D1C80018B6F6 /* ReactionChallengeMenu.swift */; };
 		CCB79375238BB6F700C51AE6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = CCB79374238BB6F700C51AE6 /* README.md */; };
 		CCB7937D238BBC0200C51AE6 /* Screenshots in Resources */ = {isa = PBXBuildFile; fileRef = CCB7937C238BBC0100C51AE6 /* Screenshots */; };
+		CCB7937F238C86DC00C51AE6 /* UserAnswerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB7937E238C86DC00C51AE6 /* UserAnswerCell.swift */; };
+		CCB79381238C92F800C51AE6 /* MemoryUserAnswers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB79380238C92F800C51AE6 /* MemoryUserAnswers.swift */; };
 		CCE2B273238853BD0092A19F /* GridChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE2B272238853BD0092A19F /* GridChallenge.swift */; };
 		CCF92C60238897A5002BBE09 /* GridHighScores.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF92C5F238897A5002BBE09 /* GridHighScores.swift */; };
 		CCF92C62238898F8002BBE09 /* GridHighscoreEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF92C61238898F8002BBE09 /* GridHighscoreEntry.swift */; };
@@ -54,6 +56,8 @@
 		CC7195622387D1C80018B6F6 /* ReactionChallengeMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionChallengeMenu.swift; sourceTree = "<group>"; };
 		CCB79374238BB6F700C51AE6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		CCB7937C238BBC0100C51AE6 /* Screenshots */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Screenshots; sourceTree = "<group>"; };
+		CCB7937E238C86DC00C51AE6 /* UserAnswerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnswerCell.swift; sourceTree = "<group>"; };
+		CCB79380238C92F800C51AE6 /* MemoryUserAnswers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryUserAnswers.swift; sourceTree = "<group>"; };
 		CCE2B272238853BD0092A19F /* GridChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridChallenge.swift; sourceTree = "<group>"; };
 		CCF92C5F238897A5002BBE09 /* GridHighScores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridHighScores.swift; sourceTree = "<group>"; };
 		CCF92C61238898F8002BBE09 /* GridHighscoreEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridHighscoreEntry.swift; sourceTree = "<group>"; };
@@ -139,6 +143,7 @@
 			children = (
 				CC5FB2CD2375E8160069AEC1 /* ChallengeTypeCell.swift */,
 				CCF92C61238898F8002BBE09 /* GridHighscoreEntry.swift */,
+				CCB7937E238C86DC00C51AE6 /* UserAnswerCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -181,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				CC5FB2E02376273D0069AEC1 /* MemoryChallenge.swift */,
+				CCB79380238C92F800C51AE6 /* MemoryUserAnswers.swift */,
 			);
 			path = Memory;
 			sourceTree = "<group>";
@@ -303,6 +309,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC5FB2DF237602D20069AEC1 /* PlayerRecord.swift in Sources */,
+				CCB79381238C92F800C51AE6 /* MemoryUserAnswers.swift in Sources */,
 				CC5FB2BD2375E7C90069AEC1 /* MainMenu.swift in Sources */,
 				CC7195632387D1C80018B6F6 /* ReactionChallengeMenu.swift in Sources */,
 				CCF92C662388B0B1002BBE09 /* DodgeTrack.swift in Sources */,
@@ -313,6 +320,7 @@
 				CC5FB2D22375EBC10069AEC1 /* TintedNavController.swift in Sources */,
 				CCF92C62238898F8002BBE09 /* GridHighscoreEntry.swift in Sources */,
 				CC5FB2D02375E8530069AEC1 /* Global Constants.swift in Sources */,
+				CCB7937F238C86DC00C51AE6 /* UserAnswerCell.swift in Sources */,
 				CC5FB2E12376273D0069AEC1 /* MemoryChallenge.swift in Sources */,
 				CC5FB2DC2376028A0069AEC1 /* NSData+AESCrypt.m in Sources */,
 				CCF92C6A238909C7002BBE09 /* FallingColor.swift in Sources */,

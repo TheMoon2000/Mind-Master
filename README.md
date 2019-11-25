@@ -5,7 +5,7 @@ A collection of challenges (games) that can boost one's cognitive capacity. It's
 - Reaction type challenges
     - Classic
     - Grid space
-    - The rules of this game are very simple. When the timer starts, all you need to do is to hit the green square as quick as possible. Accidentally tapping a gray square will result in gameover. Afteryou finish all iterations, you will see your result.
+    - The rules of this game are very simple. When the timer starts, all you need to do is to hit the green square as quick as possible. Accidentally tapping a gray square will result in gameover. After you finish all iterations, you will see your performance.
     <br>
     
     <img src="Screenshots/grid.png" width=240>
@@ -28,3 +28,11 @@ A collection of challenges (games) that can boost one's cognitive capacity. It's
     <img src="Screenshots/memory-color.png" width=240>
     <img src="Screenshots/recall.png" width=240>
     
+    <br>
+    
+    After you finish playing a round of the game, you will see your score. You can also review the questions and compare your answers against the correct ones. Both colors and characters are supported.
+    
+    <br>
+    <img src="Screenshots/recall-result.png" width=240>
+    <img src="Screenshots/memory-recall-answers.png" width=240>
+    <img src="Screenshots/memory-color-answers.png" width=240>

@@ -38,10 +38,7 @@ struct AppColors {
     
     /// The darker theme color.
     static var mainDark = UIColor(named: "AppColors.mainDark")!
-    
-    /// A red color used for fatal errors.
-    static var fatal = UIColor(red: 230/255, green: 33/255, blue: 15/255, alpha: 1)
-    
+        
     /// A orange-yellow color used for warnings.
     static var warning = UIColor(red: 243/255, green: 213/255, blue: 34/255, alpha: 1)
     
@@ -102,8 +99,8 @@ struct AppColors {
     /// A light gray tint used for disabled controls.
     static var disabled = UIColor(named: "AppColors.disabled")!
     
-    /// Message header background color.
-    static var messageHeader = UIColor(named: "AppColors.messageHeader")!
+    /// Wrong answer.
+    static var fatal = UIColor(named: "AppColors.fatal")!
     
     /// The label color for a dark background.
     static var invertedLabel = UIColor(named: "AppColors.invertedLabel")!
@@ -119,6 +116,9 @@ struct AppColors {
     
     /// A light gray tint color.
     static var lightGray = UIColor(named: "AppColors.views")!
+    
+    /// Hyperlink color.
+    static var link = UIColor(named: "AppColors.link")!
 }
 
 
@@ -144,12 +144,8 @@ extension CGPoint {
     }
 }
 
-struct RecallType: OptionSet {
-    let rawValue: Int
-    
-    static let digits       = RecallType(rawValue: 1)
-    static let letters      = RecallType(rawValue: 1 << 1)
-    static let colors       = RecallType(rawValue: 1 << 2)
+enum RecallType: Int {
+    case digits = 0, letters, alphaNumerical, colors, monochrome
 }
 
 let DISABLED_ALPHA: CGFloat = 0.5

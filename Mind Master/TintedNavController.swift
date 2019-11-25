@@ -17,6 +17,10 @@ class TintedNavigationController: UINavigationController {
         navigationBar.isTranslucent = false
     }
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return [.portrait, .portraitUpsideDown]
+    }
+    
 
     /*
     // MARK: - Navigation

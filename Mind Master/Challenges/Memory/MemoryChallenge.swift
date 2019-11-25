@@ -51,10 +51,10 @@ class MemoryChallenge: UIViewController {
     
     
     /// The list of correct answers.
-    private var recallList = [Any]()
+    private(set) var recallList = [Any]()
     
     /// The indices of the correct answers (0 = top left, 1 = top right, 2 = bottom left, 3 = bottom right).
-    private var correctIndices = [Int]()
+    private(set) var correctIndices = [Int]()
     
     private var recallView: UIView!
     private var recallTitle: UILabel!
@@ -67,21 +67,22 @@ class MemoryChallenge: UIViewController {
     private var recallBeginTime = Date()
     
     /// The four choices that were displayed to the user for each question.
-    private var recallOptions = [[Any]]()
+    private(set) var recallOptions = [[Any]]()
     
     /// The indices that the user selected (0 = top left, 1 = top right, 2 = bottom left, 3 = bottom right).
-    private var userIndices = [Int]()
+    private(set) var userIndices = [Int]()
     
     
     private var resultView: UIView!
     private var resultTitle: UILabel!
     private var resultMessage: UILabel!
     private var scorePrompt: UILabel!
-    private var score: UILabel!
+    private(set) var score: UILabel!
     private var recallScoreCaption: UILabel!
     private var returnToMenu: UIButton!
+    private var viewAnswersButton: UIButton!
     
-    let TEST_NAMES = [1: "Digits", 2: "Letters", 3: "Digits and Letters", 4: "Colors"]
+    let TEST_NAMES = ["Digits", "Letters", "Digits and Letters", "Colors", "Monochrome"]
     let DIGITS = (0...9).map { String($0) }
     let LETTERS = (65...90).map { String(UnicodeScalar($0)!) }
     let BOTH = Set(48...57).union(65...90).map { String(UnicodeScalar($0)) }
@@ -403,7 +404,7 @@ class MemoryChallenge: UIViewController {
         
         testType = {
             let button = UIButton(type: .system)
-            button.setTitle(TEST_NAMES[PlayerRecord.current.memoryTestType.rawValue] ?? "Choose...", for: .normal)
+            button.setTitle(TEST_NAMES[PlayerRecord.current.memoryTestType.rawValue], for: .normal)
             button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
             button.tintColor = AppColors.emphasis
             button.titleLabel?.textAlignment = .right
@@ -897,6 +898,22 @@ class MemoryChallenge: UIViewController {
             
             return button
         }()
+        
+        viewAnswersButton = {
+            let button = UIButton(type: .system)
+            button.tintColor = AppColors.link
+            button.setTitle("View Answers", for: .normal)
+            button.titleLabel?.font = .systemFont(ofSize: 14)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            resultView.addSubview(button)
+            
+            button.centerXAnchor.constraint(equalTo: resultView.centerXAnchor).isActive = true
+            button.bottomAnchor.constraint(equalTo: resultView.bottomAnchor, constant: -20).isActive = true
+            
+            button.addTarget(self, action: #selector(viewAnswers), for: .touchUpInside)
+            
+            return button
+        }()
     }
     
     
@@ -930,10 +947,10 @@ extension MemoryChallenge {
         let alert = UIAlertController(title: "Select test category", message: nil, preferredStyle: .actionSheet)
         alert.addAction(.init(title: "Cancel", style: .cancel))
         
-        for (value, name) in TEST_NAMES {
-            alert.addAction(.init(title: name, style: .default, handler: { _ in
-                PlayerRecord.current.memoryTestType = .init(rawValue: value)
-                self.testType.setTitle(name, for: .normal)
+        for i in 0..<TEST_NAMES.count {
+            alert.addAction(.init(title: TEST_NAMES[i], style: .default, handler: { _ in
+                PlayerRecord.current.memoryTestType = RecallType.init(rawValue: i) ?? .digits
+                self.testType.setTitle(self.TEST_NAMES[i], for: .normal)
             }))
         }
         
@@ -948,16 +965,12 @@ extension MemoryChallenge {
     
     @objc private func beginTest(_ sender: UIButton) {
         
-        guard TEST_NAMES[PlayerRecord.current.memoryTestType.rawValue] != nil else {
-            let alert = UIAlertController(title: "You must choose a test category!", message: nil, preferredStyle: .alert)
-            alert.addAction(.init(title: "OK", style: .cancel))
-            present(alert, animated: true)
-            return
-        }
-                
+        countdownFrom = 3
+        countdownDigit.text = "3"
+         
         let timer = Timer(timeInterval: 1, repeats: true) { timer in
+            self.countdownFrom -= 1
             if self.countdownFrom > 0 {
-                self.countdownFrom -= 1
                 self.countdownDigit.text = self.countdownFrom.description
             } else {
                 timer.invalidate()
@@ -981,7 +994,7 @@ extension MemoryChallenge {
             nextItem = DIGITS.randomElement()!
         case .letters:
             nextItem = LETTERS.randomElement()!
-        case [.digits, .letters]:
+        case .alphaNumerical:
             nextItem = BOTH.randomElement()!
         case .colors:
             let r = CGFloat(Int.random(in: 0...245)) / 255
@@ -989,6 +1002,9 @@ extension MemoryChallenge {
             let b = CGFloat(Int.random(in: 0...245)) / 255
             
             nextItem = UIColor(red: r, green: g, blue: b, alpha: 1)
+        case .monochrome:
+            let grayScale = CGFloat.random(in: 0...1)
+            nextItem = UIColor(white: grayScale, alpha: 1)
         default:
             preconditionFailure()
         }
@@ -1041,7 +1057,7 @@ extension MemoryChallenge {
         
         var answerOptions = [Any]()
         
-        if let recallColor = recallItem as? UIColor {
+        if let recallColor = recallItem as? UIColor, PlayerRecord.current.memoryTestType == .colors {
             let components = recallColor.cgColor.components!
            
             UIView.animate(withDuration: 0.15) {
@@ -1050,7 +1066,7 @@ extension MemoryChallenge {
             var usedColors = Set<[Int]>()
             usedColors.insert([0, 0, 0])
             
-            let granularity: CGFloat = 20
+            let granularity: CGFloat = 24
             let maxOffset = 4
             
             let rMinOffset = -min(Int(components[0] * 255 / granularity), maxOffset)
@@ -1060,7 +1076,7 @@ extension MemoryChallenge {
             let bMinOffset = -min(Int(components[2] * 255 / granularity), maxOffset)
             let bMaxOffset = min(Int((1 - components[2]) * 255 / granularity), maxOffset)
             
-            for index in 0..<4 {
+            for index in 0..<recallChoices.count {
                 if index == correctIndex {
                     answerOptions.append(recallColor)
                     continue
@@ -1087,13 +1103,46 @@ extension MemoryChallenge {
                 }
                 answerOptions.append(randomColor)
             }
+        } else if let recallGray = recallItem as? UIColor, PlayerRecord.current.memoryTestType == .monochrome {
+            
+            let grayComponent = recallGray.cgColor.components![0]
+            
+            UIView.animate(withDuration: 0.15) {
+                self.recallChoices[correctIndex].backgroundColor = recallGray
+            }
+            
+            let granularity: CGFloat = 25.0
+            let cap = 8
+            let minOffset = -min(Int(grayComponent * 255 / granularity), cap)
+            let maxOffset = min(Int((1 - grayComponent) * 255 / granularity), cap)
+            var possibilities = Set(minOffset...maxOffset)
+            possibilities.remove(0)
+            
+            for index in 0..<recallChoices.count {
+                if index == correctIndex {
+                    answerOptions.append(recallGray)
+                    continue
+                }
+                
+                let randomGray = possibilities.randomElement()!
+                possibilities.remove(randomGray)
+                
+                let randomColor = UIColor(white: CGFloat(randomGray) * granularity / 255 + grayComponent, alpha: 1)
+                
+                UIView.animate(withDuration: 0.15) {
+                    self.recallChoices[index].backgroundColor = randomColor
+                }
+                
+                answerOptions.append(randomColor)
+            }
+            
         } else if let recallLetter = recallItem as? String {
             
             var usedCharacters = Set<String>()
             self.recallChoices[correctIndex].setTitle(recallLetter, for: .normal)
             usedCharacters.insert(recallLetter)
             
-            var possibilities = Set([DIGITS, LETTERS, BOTH][PlayerRecord.current.memoryTestType.rawValue - 1])
+            var possibilities = Set([DIGITS, LETTERS, BOTH][PlayerRecord.current.memoryTestType.rawValue])
             possibilities.remove(recallLetter)
             
             for i in 0..<recallChoices.count {
@@ -1162,7 +1211,7 @@ extension MemoryChallenge {
             resultMessage.text = "Average speed: \(String(format: "%.2f", totalDuration / Double(recallList.count)))s / response"
             
             score.text = "\(correctCount)/\(correctIndices.count)"
-            recallScoreCaption.text = "Recall type: \(TEST_NAMES[PlayerRecord.current.memoryTestType.rawValue] ?? "[Error]")"
+            recallScoreCaption.text = "Recall type: \(TEST_NAMES[PlayerRecord.current.memoryTestType.rawValue])"
         }
     }
     
@@ -1172,6 +1221,9 @@ extension MemoryChallenge {
         userIndices.removeAll()
         correctIndices.removeAll()
         countdownTimer?.invalidate()
+        completionProgress.progress = 0
+        displayProgress.progress = 0
+        countdownFrom = 3
         
         for button in recallChoices {
             button.backgroundColor = nil
@@ -1180,6 +1232,14 @@ extension MemoryChallenge {
         
         startView.isHidden = false
         resultView.isHidden = true
+    }
+    
+    @objc private func viewAnswers() {
+        
+        navigationItem.backBarButtonItem = .init(title: "Results", style: .plain, target: nil, action: nil)
+        
+        let vc = MemoryUserAnswers(parent: self)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
 }
