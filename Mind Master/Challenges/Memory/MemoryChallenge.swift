@@ -561,6 +561,7 @@ class MemoryChallenge: UIViewController {
         displayedColor = {
             let v = UIView()
             v.layer.borderColor = AppColors.line.cgColor
+            v.layer.borderWidth = 1
             v.layer.cornerRadius = 5
             v.isHidden = true
             v.translatesAutoresizingMaskIntoConstraints = false
