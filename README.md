@@ -30,7 +30,7 @@ A collection of challenges (games) that can boost one's cognitive capacity. It's
     <br>
     
     After you finish playing a round of the game, you will see your score. You can also review the questions and compare your answers against the correct ones. Both colors and characters are supported.
-    <br> 
+    
     <img src="Screenshots/recall-result.png" width=240>
     <img src="Screenshots/memory-recall-answers.png" width=240>
     <img src="Screenshots/memory-color-answers.png" width=240>
