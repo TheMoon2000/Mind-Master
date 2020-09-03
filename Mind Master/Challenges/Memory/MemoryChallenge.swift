@@ -14,6 +14,8 @@ class MemoryChallenge: UIViewController {
     let MAX_ITEMS = 30
     let MIN_ITEMS = 4
     
+    // MARK: Start screen UI elements
+    
     private var startView: UIView!
     private var welcomeMessage: UILabel!
     private var numberOfItemsLabel: UILabel!
@@ -31,6 +33,8 @@ class MemoryChallenge: UIViewController {
     private var beginButton: UIButton!
     
     
+    // MARK: Countdown related UI elements
+    
     private var countdownView: UIView!
     private var countdownTitle: UILabel!
     private var countdownSubtitle: UILabel!
@@ -40,13 +44,33 @@ class MemoryChallenge: UIViewController {
     private var countdownTimer: Timer?
     
     
-    private var digitDisplayView: UIView!
+    // MARK: Color-related recall tasks
+    
+    /// The parent view containing all other UI elements for the memorization phase.
+    private var memorizationDisplayView: UIView!
+    
+    /// The title label that is shown during the memorization phase.
     private var displayTitle: UILabel!
+    
+    /// The subtitle label that is shown during the memorization phase.
     private var displaySubtitle: UILabel!
+    
+    /// The digit which is shown to the user during the memorization phase.
     private var displayedDigit: UILabel!
-    private var displayedColor: UIView!
+    
+    /// The view which is shown to the user during the memorization phase.
+    private var displayedVisual: UIView!
+    
+    /// The circle whose size the user is supposed to memorize in the “size” task.
+    private var circle: CircleView!
+    
+    /// The bar indicating the time remaining for the current item to memorize.
     private var displayTimeRemaining: UIProgressView!
+    
+    /// A descriptive text describing the user's progress during the memorization phase.
     private var displayProgressLabel: UILabel!
+    
+    /// The bar indicating the user's progress during the memorization phase.
     private var displayProgress: UIProgressView!
     
     
@@ -56,12 +80,23 @@ class MemoryChallenge: UIViewController {
     /// The indices of the correct answers (0 = top left, 1 = top right, 2 = bottom left, 3 = bottom right).
     private(set) var correctIndices = [Int]()
     
+    
+    // MARK: Recall phase UI elements
+    
     private var recallView: UIView!
     private var recallTitle: UILabel!
     private var recallSubtitle: UILabel!
     private var recallIndexLabel: UILabel!
+    
+    /// A transparent container view containing the `recallChoices`.
     private var recallItemsContainer: UIView!
+    
+    /// The 4 buttons which the user can press during recall phase.
     private var recallChoices = [UIButton]()
+    
+    /// Recall circles centered at each of the 4 recall chocie buttons.
+    private var recallCircles = [CircleView]()
+    
     private var completionLabel: UILabel!
     private var completionProgress: UIProgressView!
     private var recallBeginTime = Date()
@@ -82,7 +117,7 @@ class MemoryChallenge: UIViewController {
     private var returnToMenu: UIButton!
     private var viewAnswersButton: UIButton!
     
-    let TEST_NAMES = ["Digits", "Letters", "Digits and Letters", "Colors", "Monochrome"]
+    let TEST_NAMES = ["Digits", "Letters", "Digits and Letters", "Colors", "Monochrome", "2D Size"]
     let DIGITS = (0...9).map { String($0) }
     let LETTERS = (65...90).map { String(UnicodeScalar($0)!) }
     let BOTH = Set(48...57).union(65...90).map { String(UnicodeScalar($0)) }
@@ -160,7 +195,7 @@ class MemoryChallenge: UIViewController {
             return v
         }
         
-        digitDisplayView = makeBlankView()
+        memorizationDisplayView = makeBlankView()
         recallView = makeBlankView()
         resultView = makeBlankView()
         
@@ -466,7 +501,6 @@ class MemoryChallenge: UIViewController {
         
         countdownSubtitle = {
             let label = UILabel()
-            label.text = "Difficulty: \(PlayerRecord.current.memoryItemCount) items, \(String(format: "%.1f", PlayerRecord.current.delayPerItem))s per item"
             label.textColor = AppColors.label
             label.textAlignment = .center
             label.font = .systemFont(ofSize: 15)
@@ -518,10 +552,10 @@ class MemoryChallenge: UIViewController {
             label.font = .systemFont(ofSize: 18, weight: .semibold)
             label.textAlignment = .center
             label.translatesAutoresizingMaskIntoConstraints = false
-            digitDisplayView.addSubview(label)
+            memorizationDisplayView.addSubview(label)
             
-            label.centerXAnchor.constraint(equalTo: digitDisplayView.centerXAnchor).isActive = true
-            label.topAnchor.constraint(equalTo: digitDisplayView.topAnchor, constant: 55).isActive = true
+            label.centerXAnchor.constraint(equalTo: memorizationDisplayView.centerXAnchor).isActive = true
+            label.topAnchor.constraint(equalTo: memorizationDisplayView.topAnchor, constant: 55).isActive = true
             
             return label
         }()
@@ -534,10 +568,10 @@ class MemoryChallenge: UIViewController {
             label.font = .systemFont(ofSize: 14)
             label.textAlignment = .center
             label.translatesAutoresizingMaskIntoConstraints = false
-            digitDisplayView.addSubview(label)
+            memorizationDisplayView.addSubview(label)
             
-            label.leftAnchor.constraint(equalTo: digitDisplayView.leftAnchor, constant: 30).isActive = true
-            label.rightAnchor.constraint(equalTo: digitDisplayView.rightAnchor, constant: -30).isActive = true
+            label.leftAnchor.constraint(equalTo: memorizationDisplayView.leftAnchor, constant: 30).isActive = true
+            label.rightAnchor.constraint(equalTo: memorizationDisplayView.rightAnchor, constant: -30).isActive = true
             label.topAnchor.constraint(equalTo: displayTitle.bottomAnchor, constant: 10).isActive = true
             
             return label
@@ -550,27 +584,38 @@ class MemoryChallenge: UIViewController {
             digit.font = .systemFont(ofSize: 120)
             digit.textAlignment = .center
             digit.translatesAutoresizingMaskIntoConstraints = false
-            digitDisplayView.addSubview(digit)
+            memorizationDisplayView.addSubview(digit)
             
-            digit.centerXAnchor.constraint(equalTo: digitDisplayView.centerXAnchor).isActive = true
-            digit.centerYAnchor.constraint(equalTo: digitDisplayView.centerYAnchor, constant: -20).isActive = true
+            digit.centerXAnchor.constraint(equalTo: memorizationDisplayView.centerXAnchor).isActive = true
+            digit.centerYAnchor.constraint(equalTo: memorizationDisplayView.centerYAnchor, constant: -20).isActive = true
             
             return digit
         }()
         
-        displayedColor = {
+        displayedVisual = {
             let v = UIView()
             v.layer.borderColor = AppColors.line.cgColor
             v.layer.borderWidth = 1
             v.layer.cornerRadius = 5
             v.isHidden = true
             v.translatesAutoresizingMaskIntoConstraints = false
-            digitDisplayView.addSubview(v)
+            memorizationDisplayView.addSubview(v)
             
             v.bottomAnchor.constraint(equalTo: displayedDigit.bottomAnchor).isActive = true
             v.widthAnchor.constraint(equalTo: v.heightAnchor).isActive = true
-            v.centerXAnchor.constraint(equalTo: digitDisplayView.centerXAnchor).isActive = true
+            v.centerXAnchor.constraint(equalTo: memorizationDisplayView.centerXAnchor).isActive = true
             v.heightAnchor.constraint(equalTo: displayedDigit.heightAnchor).isActive = true
+            
+            return v
+        }()
+        
+        circle = {
+            let v = CircleView()
+            v.translatesAutoresizingMaskIntoConstraints = false
+            memorizationDisplayView.addSubview(v)
+            
+            v.centerXAnchor.constraint(equalTo: displayedVisual.centerXAnchor).isActive = true
+            v.centerYAnchor.constraint(equalTo: displayedVisual.centerYAnchor).isActive = true
             
             return v
         }()
@@ -580,11 +625,11 @@ class MemoryChallenge: UIViewController {
             bar.trackTintColor = AppColors.line
             bar.progressTintColor = AppColors.lightControl
             bar.translatesAutoresizingMaskIntoConstraints = false
-            digitDisplayView.addSubview(bar)
+            memorizationDisplayView.addSubview(bar)
             
             bar.topAnchor.constraint(equalTo: displayedDigit.bottomAnchor, constant: 40).isActive = true
             bar.widthAnchor.constraint(equalToConstant: 200).isActive = true
-            bar.centerXAnchor.constraint(equalTo: digitDisplayView.centerXAnchor).isActive = true
+            bar.centerXAnchor.constraint(equalTo: memorizationDisplayView.centerXAnchor).isActive = true
             
             return bar
         }()
@@ -594,11 +639,11 @@ class MemoryChallenge: UIViewController {
             bar.trackTintColor = AppColors.line
             bar.progressTintColor = AppColors.memory
             bar.translatesAutoresizingMaskIntoConstraints = false
-            digitDisplayView.addSubview(bar)
+            memorizationDisplayView.addSubview(bar)
             
             bar.widthAnchor.constraint(equalToConstant: 210).isActive = true
-            bar.centerXAnchor.constraint(equalTo: digitDisplayView.centerXAnchor).isActive = true
-            bar.bottomAnchor.constraint(equalTo: digitDisplayView.bottomAnchor, constant: -32).isActive = true
+            bar.centerXAnchor.constraint(equalTo: memorizationDisplayView.centerXAnchor).isActive = true
+            bar.bottomAnchor.constraint(equalTo: memorizationDisplayView.bottomAnchor, constant: -32).isActive = true
             
             return bar
         }()
@@ -609,10 +654,10 @@ class MemoryChallenge: UIViewController {
             label.textColor = AppColors.label
             label.textAlignment = .center
             label.translatesAutoresizingMaskIntoConstraints = false
-            digitDisplayView.addSubview(label)
+            memorizationDisplayView.addSubview(label)
             
             label.bottomAnchor.constraint(equalTo: displayProgress.topAnchor, constant: -12).isActive = true
-            label.centerXAnchor.constraint(equalTo: digitDisplayView.centerXAnchor).isActive = true
+            label.centerXAnchor.constraint(equalTo: memorizationDisplayView.centerXAnchor).isActive = true
             
             return label
         }()
@@ -700,7 +745,7 @@ class MemoryChallenge: UIViewController {
             v.widthAnchor.constraint(equalTo: v.heightAnchor).isActive = true
             v.centerXAnchor.constraint(equalTo: recallView.centerXAnchor).isActive = true
             v.leftAnchor.constraint(greaterThanOrEqualTo: recallView.leftAnchor, constant: 55).isActive = true
-            v.widthAnchor.constraint(lessThanOrEqualToConstant: 600).isActive = true
+            v.widthAnchor.constraint(lessThanOrEqualToConstant: 520).isActive = true
             v.bottomAnchor.constraint(lessThanOrEqualTo: completionLabel.topAnchor, constant: -20).isActive = true
             
             let centerY = v.centerYAnchor.constraint(equalTo: recallView.centerYAnchor, constant: 40)
@@ -714,10 +759,10 @@ class MemoryChallenge: UIViewController {
             return v
         }()
         
+        // Configure the 4 choice buttons during answer phase.
         for _ in 0..<4 {
             let choice = UIButton(type: .system)
             choice.titleLabel?.font = .systemFont(ofSize: 24)
-            // choice.tintColor = AppColors.value
             choice.translatesAutoresizingMaskIntoConstraints = false
             recallItemsContainer.addSubview(choice)
             recallChoices.append(choice)
@@ -726,6 +771,15 @@ class MemoryChallenge: UIViewController {
             choice.heightAnchor.constraint(equalTo: choice.widthAnchor).isActive = true
             
             choice.addTarget(self, action: #selector(submitRecallResponse(_:)), for: .touchUpInside)
+            
+            // Circle
+            let circle = CircleView()
+            circle.translatesAutoresizingMaskIntoConstraints = false
+            recallItemsContainer.addSubview(circle)
+            recallCircles.append(circle)
+            
+            circle.centerXAnchor.constraint(equalTo: choice.centerXAnchor).isActive = true
+            circle.centerYAnchor.constraint(equalTo: choice.centerYAnchor).isActive = true
         }
         
         recallChoices[0].leftAnchor.constraint(equalTo: recallItemsContainer.leftAnchor).isActive = true
@@ -785,17 +839,6 @@ class MemoryChallenge: UIViewController {
     }
     
     private func setupResultView() {
-        
-        /*
-         
-         private var resultTitle: UILabel!
-         private var resultMessage: UILabel!
-         private var scorePrompt: UILabel!
-         private var score: UILabel!
-         private var recallScoreCaption: UILabel!
-         private var returnToMenu: UIButton!
-         
-         */
         
         score = {
             let label = UILabel()
@@ -968,6 +1011,7 @@ extension MemoryChallenge {
         
         countdownFrom = 3
         countdownDigit.text = "3"
+        countdownSubtitle.text = "Difficulty: \(PlayerRecord.current.memoryItemCount) items, \(String(format: "%.1f", PlayerRecord.current.delayPerItem))s per item"
          
         let timer = Timer(timeInterval: 1, repeats: true) { timer in
             self.countdownFrom -= 1
@@ -976,7 +1020,7 @@ extension MemoryChallenge {
             } else {
                 timer.invalidate()
                 self.countdownView.isHidden = true
-                self.digitDisplayView.isHidden = false
+                self.memorizationDisplayView.isHidden = false
                 self.generateNextItem()
             }
         }
@@ -988,8 +1032,12 @@ extension MemoryChallenge {
         countdownView.isHidden = false
     }
     
+    /// Generates an item for the user to memorize.
     private func generateNextItem() {
+        
+        /// The correct answer to the upcoming recall question.
         let nextItem: Any
+        
         switch PlayerRecord.current.memoryTestType {
         case .digits:
             nextItem = DIGITS.randomElement()!
@@ -1006,23 +1054,28 @@ extension MemoryChallenge {
         case .monochrome:
             let grayScale = CGFloat.random(in: 0...1)
             nextItem = UIColor(white: grayScale, alpha: 1)
-        default:
-            preconditionFailure()
+        case .size:
+            nextItem = CGFloat.random(in: 0.1...0.95)
         }
         
+        // Determine which of the 4 choice buttons will display the correct answer.
         correctIndices.append(Int.random(in: 0..<4))
         recallList.append(nextItem)
         
-        // Display this digit to the player
-        
+        // Display this item to the player.
         if let nextChar = nextItem as? String {
             displayedDigit.isHidden = false
-            displayedColor.isHidden = true
+            displayedVisual.isHidden = true
             displayedDigit.text = nextChar
         } else if let nextColor = nextItem as? UIColor {
-            displayedColor.isHidden = false
+            displayedVisual.isHidden = false
             displayedDigit.isHidden = true
-            displayedColor.backgroundColor = nextColor
+            displayedVisual.backgroundColor = nextColor
+        } else if let nextSize = nextItem as? CGFloat {
+            displayedDigit.isHidden = true
+            displayedVisual.isHidden = false
+            displayedVisual.backgroundColor = nil
+            circle.radius = nextSize * displayedVisual.frame.width / 2
         }
         
         displayProgressLabel.text = "Item \(recallList.count) of \(PlayerRecord.current.memoryItemCount)"
@@ -1036,14 +1089,13 @@ extension MemoryChallenge {
             if elapsed > PlayerRecord.current.delayPerItem {
                 timer.invalidate()
                 self.displayTimeRemaining.setProgress(0, animated: false)
-                if PlayerRecord.current.memoryItemCount > self.recallList.count {
+                if self.recallList.count < PlayerRecord.current.memoryItemCount {
                     self.generateNextItem()
                 } else {
-                    self.digitDisplayView.isHidden = true
+                    self.memorizationDisplayView.isHidden = true
                     self.recallView.isHidden = false
                     self.completionProgress.progress = 0
                     self.displayRecallScreen()
-                    self.recallBeginTime = Date()
                 }
             }
         }
@@ -1051,11 +1103,14 @@ extension MemoryChallenge {
     }
     
     private func displayRecallScreen() {
+        recallBeginTime = Date()
+        
         let recallIndex = Int(userIndices.count)
         let recallItem = recallList[recallIndex]
         let correctIndex = correctIndices[recallIndex]
         recallIndexLabel.text = "Item \(recallIndex + 1) of \(recallList.count)"
         
+        /// Consists of 4 answers that are presented to the user.
         var answerOptions = [Any]()
         
         if let recallColor = recallItem as? UIColor, PlayerRecord.current.memoryTestType == .colors {
@@ -1067,7 +1122,7 @@ extension MemoryChallenge {
             var usedColors = Set<[Int]>()
             usedColors.insert([0, 0, 0])
             
-            let granularity: CGFloat = 24
+            let granularity: CGFloat = 25
             let maxOffset = 4
             
             let rMinOffset = -min(Int(components[0] * 255 / granularity), maxOffset)
@@ -1139,9 +1194,7 @@ extension MemoryChallenge {
             
         } else if let recallLetter = recallItem as? String {
             
-            var usedCharacters = Set<String>()
             self.recallChoices[correctIndex].setTitle(recallLetter, for: .normal)
-            usedCharacters.insert(recallLetter)
             
             var possibilities = Set([DIGITS, LETTERS, BOTH][PlayerRecord.current.memoryTestType.rawValue])
             possibilities.remove(recallLetter)
@@ -1152,10 +1205,33 @@ extension MemoryChallenge {
                     continue
                 }
                 let randomLetter = possibilities.randomElement()!
+                possibilities.remove(randomLetter)
                 answerOptions.append(randomLetter)
                 UIView.performWithoutAnimation {
                     self.recallChoices[i].setTitle(randomLetter, for: .normal)
                 }
+            }
+        } else if let recallSize = recallItem as? CGFloat {
+            
+            UIView.animate(withDuration: 0.15) {
+                self.recallCircles[correctIndex].radius = recallSize * self.recallChoices[correctIndex].frame.width / 2
+            }
+            
+            for i in 0..<recallChoices.count {
+                if i == correctIndex {
+                    answerOptions.append(recallSize)
+                    continue
+                }
+                
+                var randomSize: CGFloat = recallSize
+                
+                /// Make sure the wrong answers aren't too close to the true answer.
+                while abs(randomSize - recallSize) < 0.1 {
+                    randomSize = CGFloat.random(in: 0.1...0.95)
+                }
+                
+                answerOptions.append(randomSize)
+                recallCircles[i].radius = randomSize * recallChoices[i].frame.width / 2
             }
         }
         
@@ -1226,9 +1302,10 @@ extension MemoryChallenge {
         displayProgress.progress = 0
         countdownFrom = 3
         
-        for button in recallChoices {
-            button.backgroundColor = nil
-            button.setTitle(nil, for: .normal)
+        for i in 0..<recallChoices.count {
+            recallChoices[i].backgroundColor = nil
+            recallChoices[i].setTitle(nil, for: .normal)
+            recallCircles[i].radius = 0
         }
         
         startView.isHidden = false

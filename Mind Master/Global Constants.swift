@@ -145,7 +145,7 @@ extension CGPoint {
 }
 
 enum RecallType: Int {
-    case digits = 0, letters, alphaNumerical, colors, monochrome
+    case digits = 0, letters, alphaNumerical, colors, monochrome, size
 }
 
 let DISABLED_ALPHA: CGFloat = 0.5

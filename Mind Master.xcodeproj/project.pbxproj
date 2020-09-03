@@ -21,6 +21,7 @@
 		CC5FB2DF237602D20069AEC1 /* PlayerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2DE237602D20069AEC1 /* PlayerRecord.swift */; };
 		CC5FB2E12376273D0069AEC1 /* MemoryChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2E02376273D0069AEC1 /* MemoryChallenge.swift */; };
 		CC7195632387D1C80018B6F6 /* ReactionChallengeMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7195622387D1C80018B6F6 /* ReactionChallengeMenu.swift */; };
+		CCA6784A25012AAF006034C0 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA6784925012AAF006034C0 /* CircleView.swift */; };
 		CCB79375238BB6F700C51AE6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = CCB79374238BB6F700C51AE6 /* README.md */; };
 		CCB7937D238BBC0200C51AE6 /* Screenshots in Resources */ = {isa = PBXBuildFile; fileRef = CCB7937C238BBC0100C51AE6 /* Screenshots */; };
 		CCB7937F238C86DC00C51AE6 /* UserAnswerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB7937E238C86DC00C51AE6 /* UserAnswerCell.swift */; };
@@ -54,6 +55,7 @@
 		CC5FB2DE237602D20069AEC1 /* PlayerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerRecord.swift; sourceTree = "<group>"; };
 		CC5FB2E02376273D0069AEC1 /* MemoryChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryChallenge.swift; sourceTree = "<group>"; };
 		CC7195622387D1C80018B6F6 /* ReactionChallengeMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionChallengeMenu.swift; sourceTree = "<group>"; };
+		CCA6784925012AAF006034C0 /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		CCB79374238BB6F700C51AE6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		CCB7937C238BBC0100C51AE6 /* Screenshots */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Screenshots; sourceTree = "<group>"; };
 		CCB7937E238C86DC00C51AE6 /* UserAnswerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnswerCell.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				CC5FB2E02376273D0069AEC1 /* MemoryChallenge.swift */,
+				CCA6784925012AAF006034C0 /* CircleView.swift */,
 				CCB79380238C92F800C51AE6 /* MemoryUserAnswers.swift */,
 			);
 			path = Memory;
@@ -320,6 +323,7 @@
 				CC5FB2D22375EBC10069AEC1 /* TintedNavController.swift in Sources */,
 				CCF92C62238898F8002BBE09 /* GridHighscoreEntry.swift in Sources */,
 				CC5FB2D02375E8530069AEC1 /* Global Constants.swift in Sources */,
+				CCA6784A25012AAF006034C0 /* CircleView.swift in Sources */,
 				CCB7937F238C86DC00C51AE6 /* UserAnswerCell.swift in Sources */,
 				CC5FB2E12376273D0069AEC1 /* MemoryChallenge.swift in Sources */,
 				CC5FB2DC2376028A0069AEC1 /* NSData+AESCrypt.m in Sources */,

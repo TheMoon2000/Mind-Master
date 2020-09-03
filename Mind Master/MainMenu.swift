@@ -154,6 +154,9 @@ extension MainMenu: UITableViewDataSource, UITableViewDelegate {
             let vc = MemoryChallenge()
             navigationController?.pushViewController(vc, animated: true)
         default:
+            let alert = UIAlertController(title: "Mode Unavailable", message: "The selected mode is still in development.", preferredStyle: .alert)
+            alert.addAction(.init(title: "OK", style: .cancel))
+            present(alert, animated: true)
             break
         }
     }
