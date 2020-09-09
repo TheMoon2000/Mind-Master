@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		741873A326C195CA5410B551 /* Pods_Mind_Master.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31540F38DE69E3C8353969E4 /* Pods_Mind_Master.framework */; };
+		CC0F75D02508E882000424AB /* Privacy.md in Resources */ = {isa = PBXBuildFile; fileRef = CC0F75CF2508E882000424AB /* Privacy.md */; };
 		CC30631D25086D48000C5516 /* AboutPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30631C25086D48000C5516 /* AboutPage.swift */; };
 		CC5FB2B92375E7C90069AEC1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2B82375E7C90069AEC1 /* AppDelegate.swift */; };
 		CC5FB2BD2375E7C90069AEC1 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2BC2375E7C90069AEC1 /* MainMenu.swift */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		31540F38DE69E3C8353969E4 /* Pods_Mind_Master.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mind_Master.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC0F75CF2508E882000424AB /* Privacy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Privacy.md; sourceTree = "<group>"; };
 		CC30631C25086D48000C5516 /* AboutPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPage.swift; sourceTree = "<group>"; };
 		CC5FB2B52375E7C90069AEC1 /* Mind Master.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mind Master.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC5FB2B82375E7C90069AEC1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				CCB79374238BB6F700C51AE6 /* README.md */,
+				CC0F75CF2508E882000424AB /* Privacy.md */,
 				CCB7937C238BBC0100C51AE6 /* Screenshots */,
 				CC5FB2B72375E7C90069AEC1 /* Mind Master */,
 				CC5FB2B62375E7C90069AEC1 /* Products */,
@@ -259,6 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CCB79375238BB6F700C51AE6 /* README.md in Resources */,
+				CC0F75D02508E882000424AB /* Privacy.md in Resources */,
 				CC5FB2C52375E7CC0069AEC1 /* LaunchScreen.storyboard in Resources */,
 				CC5FB2C22375E7CC0069AEC1 /* Assets.xcassets in Resources */,
 				CCB7937D238BBC0200C51AE6 /* Screenshots in Resources */,
@@ -474,6 +478,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = US8T2D45H8;
 				INFOPLIST_FILE = "Mind Master/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -497,6 +502,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = US8T2D45H8;
 				INFOPLIST_FILE = "Mind Master/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
