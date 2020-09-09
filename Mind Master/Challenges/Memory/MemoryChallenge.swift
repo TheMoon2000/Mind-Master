@@ -1001,8 +1001,10 @@ extension MemoryChallenge {
         }
         
         if let popoverController = alert.popoverPresentationController {
-            popoverController.sourceView = testType
-            popoverController.sourceRect = testType.frame
+            popoverController.permittedArrowDirections = .up
+            popoverController.sourceView = sender
+            let bottomPoint = sender.convert(CGPoint(x: sender.frame.midX, y: sender.frame.maxY), from: startView)
+            popoverController.sourceRect = CGRect(origin: bottomPoint, size: CGSize(width: 1, height: 1))
         }
         
         present(alert, animated: true)
