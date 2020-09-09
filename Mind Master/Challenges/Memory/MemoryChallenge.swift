@@ -22,7 +22,7 @@ class MemoryChallenge: UIViewController {
     private var numberOfItems: UILabel!
     private var numberOfItemsSlider: UISlider!
     private var numberOfItemsSliderTrack: UIView!
-    private var thumbWidth: CGFloat = 0
+    private var thumbWidth: CGFloat = 27
     private var numberOfItemsPrompt: UILabel!
     private var delayPerItemLabel: UILabel!
     private var delayPerItem: UILabel!
@@ -263,7 +263,7 @@ class MemoryChallenge: UIViewController {
             slider.minimumValue = Float(MIN_ITEMS)
             slider.maximumValue = Float(MAX_ITEMS)
             slider.value = Float(PlayerRecord.current.memoryItemCount)
-            slider.maximumTrackTintColor = .clear // AppColors.disabled
+            slider.maximumTrackTintColor = .clear
             slider.minimumTrackTintColor = .clear
             slider.translatesAutoresizingMaskIntoConstraints = false
             startView.addSubview(slider)
@@ -289,10 +289,12 @@ class MemoryChallenge: UIViewController {
             ticks.bottomAnchor.constraint(equalTo: numberOfItemsSlider.bottomAnchor).isActive = true
             
             let segmentCount = CGFloat(MAX_ITEMS - MIN_ITEMS)
+            /*
             thumbWidth = numberOfItemsSlider.thumbRect(
                 forBounds: numberOfItemsSlider.bounds,
                 trackRect: numberOfItemsSlider.trackRect(forBounds: numberOfItemsSlider.bounds), value: 0).width
-            
+            */
+ 
             let track = UIView()
             track.backgroundColor = AppColors.line
             track.translatesAutoresizingMaskIntoConstraints = false
@@ -394,7 +396,7 @@ class MemoryChallenge: UIViewController {
             slider.minimumValue = 0.1
             slider.maximumValue = 5.0
             slider.value = Float(PlayerRecord.current.delayPerItem)
-            slider.maximumTrackTintColor = AppColors.disabled
+            slider.maximumTrackTintColor = AppColors.line
             slider.translatesAutoresizingMaskIntoConstraints = false
             startView.addSubview(slider)
             

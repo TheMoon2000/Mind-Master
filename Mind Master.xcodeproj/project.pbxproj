@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		741873A326C195CA5410B551 /* Pods_Mind_Master.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31540F38DE69E3C8353969E4 /* Pods_Mind_Master.framework */; };
+		CC30631D25086D48000C5516 /* AboutPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30631C25086D48000C5516 /* AboutPage.swift */; };
 		CC5FB2B92375E7C90069AEC1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2B82375E7C90069AEC1 /* AppDelegate.swift */; };
 		CC5FB2BD2375E7C90069AEC1 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2BC2375E7C90069AEC1 /* MainMenu.swift */; };
 		CC5FB2C22375E7CC0069AEC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC5FB2C12375E7CC0069AEC1 /* Assets.xcassets */; };
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		31540F38DE69E3C8353969E4 /* Pods_Mind_Master.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mind_Master.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC30631C25086D48000C5516 /* AboutPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPage.swift; sourceTree = "<group>"; };
 		CC5FB2B52375E7C90069AEC1 /* Mind Master.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mind Master.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC5FB2B82375E7C90069AEC1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CC5FB2BC2375E7C90069AEC1 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				CC5FB2D12375EBC10069AEC1 /* TintedNavController.swift */,
 				CC5FB2BC2375E7C90069AEC1 /* MainMenu.swift */,
 				CCF92C6B238913BC002BBE09 /* Queue.swift */,
+				CC30631C25086D48000C5516 /* AboutPage.swift */,
 				CC5FB2DD237602900069AEC1 /* Objective-C */,
 				CC5FB2D32375F69B0069AEC1 /* Challenges */,
 				CC5FB2CC2375E7FD0069AEC1 /* Cells */,
@@ -321,6 +324,7 @@
 				CC5FB2CE2375E8160069AEC1 /* ChallengeTypeCell.swift in Sources */,
 				CCF92C6C238913BC002BBE09 /* Queue.swift in Sources */,
 				CC5FB2D22375EBC10069AEC1 /* TintedNavController.swift in Sources */,
+				CC30631D25086D48000C5516 /* AboutPage.swift in Sources */,
 				CCF92C62238898F8002BBE09 /* GridHighscoreEntry.swift in Sources */,
 				CC5FB2D02375E8530069AEC1 /* Global Constants.swift in Sources */,
 				CCA6784A25012AAF006034C0 /* CircleView.swift in Sources */,
@@ -476,7 +480,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.themoon2000.Mind-Master";
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.themoon2000.mind-master";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mind Master/Mind Master-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -498,7 +503,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.themoon2000.Mind-Master";
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.themoon2000.mind-master";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mind Master/Mind Master-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

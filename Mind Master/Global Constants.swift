@@ -8,6 +8,7 @@
 
 import UIKit
 import BonMot
+import Down
 
 let SAVE_PATH = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("save")
 
@@ -149,3 +150,108 @@ enum RecallType: Int {
 }
 
 let DISABLED_ALPHA: CGFloat = 0.5
+
+
+/// Style for Markdown.
+let PLAIN_STYLE =  """
+    body {
+        font-family: -apple-system;
+        font-size: 17px;
+        line-height: 1.5;
+        letter-spacing: 1.5%;
+        color: #525252;
+        margin-bottom: 12px;
+    }
+
+    li {
+        margin-bottom: 8px;
+    }
+
+    strong, em {
+        color: #494949;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: -apple-system;
+        font-weight: 600;
+        letter-spacing: 1.5%;
+        color: rgb(70, 70, 70);
+        line-height: 1.4;
+    }
+
+    h1 {
+        font-size: 23px;
+        margin-bottom: 14px;
+    }
+
+    h2 {
+        font-size: 22px;
+        margin-bottom: 13.5px;
+    }
+
+    h3 {
+        font-size: 21px;
+        margin-bottom: 13px;
+    }
+
+    h4 {
+        font-size: 20px;
+        margin-bottom: 12.5px;
+    }
+
+    h5 {
+        font-size: 19px;
+        margin-bottom: 12px;
+    }
+    h6 {
+        margin-bottom: 11px;
+        font-size: 18px;
+    }
+
+    a {
+        color: rgb(104, 165, 245);
+    }
+"""
+
+let PLAIN_DARK = PLAIN_STYLE.replacingOccurrences(of: "#525252", with: "#C9C9C9").replacingOccurrences(of: "#494949", with: "#D7D7D7")
+
+fileprivate let standardAttributes: [NSAttributedString.Key : Any] = {
+    let pStyle = NSMutableParagraphStyle()
+    pStyle.lineSpacing = 5.0
+    pStyle.paragraphSpacing = 12.0
+    
+    return [
+        NSAttributedString.Key.paragraphStyle: pStyle,
+        NSAttributedString.Key.foregroundColor: UIColor.darkGray,
+        NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16.5),
+        NSAttributedString.Key.kern: 0.2
+    ]
+}()
+
+extension String {
+    /// Email verification method.
+    func isValidEmail() -> Bool {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: self)
+    }
+    
+    /// Markdown-formatted text.
+    func attributedText(style: String = PLAIN_STYLE) -> NSAttributedString {
+        if isEmpty { return NSAttributedString() }
+        if let d = try? Down(markdownString: self).toAttributedString(.default, stylesheet: style) {
+            if d.string.isEmpty {
+                return NSAttributedString(string: self, attributes: standardAttributes)
+            }
+            return d.attributedSubstring(from: NSMakeRange(0, d.length - 1))
+        } else {
+            print("WARNING: markdown failed")
+            return NSAttributedString(string: self, attributes: standardAttributes)
+        }
+    }
+}
+

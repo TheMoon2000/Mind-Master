@@ -8,5 +8,6 @@ target 'Mind Master' do
   # Pods for Mind Master
   pod 'BonMot'
   pod 'SwiftyJSON'
+  pod 'Down'
 
 end

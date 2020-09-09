@@ -14,7 +14,7 @@ class GridChallenge: UIViewController {
     private var sliderValue: UILabel!
     private var slider: UISlider!
     private var sliderTrack: UIView!
-    private var thumbWidth: CGFloat = 0
+    private var thumbWidth: CGFloat = 27
     
     private var grid: UIView!
     private var buttons = [UIButton]()
@@ -283,9 +283,12 @@ class GridChallenge: UIViewController {
             
             let segmentCount = CGFloat(MAX_ITERATIONS - MIN_ITERATIONS)
             slider.layoutIfNeeded()
+            
+            /*
             thumbWidth = slider.thumbRect(
                 forBounds: slider.bounds,
                 trackRect: slider.trackRect(forBounds: slider.bounds), value: 0).width
+            print(thumbWidth)*/
             
             let track = UIView()
             track.backgroundColor = AppColors.line
@@ -342,13 +345,7 @@ class GridChallenge: UIViewController {
     // MARK - Implementation
     
     @objc private func sliderChanged() {
-        
-        // let halfThumb = thumbWidth / 2 / slider.frame.width * CGFloat(MAX_ITERATIONS - MIN_ITERATIONS)
-        
-        // Note: we need to recalculate the actual slider value as appeared to the user, because our custom track is narrower than the default track.
-        let apparentSliderValue = slider.value // max(0, CGFloat(slider.value) - halfThumb) * slider.frame.width / (slider.frame.width - 2 * halfThumb)
-                        
-        slider.value = round(Float(apparentSliderValue))
+        slider.value = round(Float(slider.value))
         if slider.value != currentValue {
             currentValue = slider.value
             UISelectionFeedbackGenerator().selectionChanged()

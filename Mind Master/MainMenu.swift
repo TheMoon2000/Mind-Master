@@ -136,8 +136,8 @@ extension MainMenu: UITableViewDataSource, UITableViewDelegate {
             cell.titleLabel.text = "Pattern Finding"
             cell.icon.image = #imageLiteral(resourceName: "pattern")
         case 3:
-            cell.titleLabel.text = "Achievements"
-            cell.icon.image = #imageLiteral(resourceName: "achievements")
+            cell.titleLabel.text = "About"
+            cell.icon.image = #imageLiteral(resourceName: "info")
         default:
             break
         }
@@ -152,6 +152,9 @@ extension MainMenu: UITableViewDataSource, UITableViewDelegate {
             navigationController?.pushViewController(vc, animated: true)
         case 1:
             let vc = MemoryChallenge()
+            navigationController?.pushViewController(vc, animated: true)
+        case 3:
+            let vc = AboutPage()
             navigationController?.pushViewController(vc, animated: true)
         default:
             let alert = UIAlertController(title: "Mode Unavailable", message: "The selected mode is still in development.", preferredStyle: .alert)

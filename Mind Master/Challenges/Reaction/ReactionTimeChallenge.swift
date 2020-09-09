@@ -18,7 +18,7 @@ class ReactionTimeChallenge: UIViewController {
     private let pressTitle = "Tap Now!"
     
     private var pressTimer: Timer?
-    private var pressTime = Date.timeIntervalSinceReferenceDate
+    private var pressTime = Date()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,9 +82,9 @@ class ReactionTimeChallenge: UIViewController {
             UISelectionFeedbackGenerator().selectionChanged()
             let randomTime = Double.random(in: 3.0...8.0)
             let timer = Timer.init(fire: Date(timeIntervalSinceNow: randomTime), interval: 0, repeats: false) { timer in
-                self.tapArea.backgroundColor = AppColors.reaction.withAlphaComponent(0.8)
+                self.tapArea.backgroundColor = AppColors.reaction
                 self.tapArea.setTitle(self.pressTitle, for: .normal)
-                self.pressTime = Date.timeIntervalSinceReferenceDate
+                self.pressTime = Date()
             }
             pressTimer = timer
             RunLoop.main.add(timer, forMode: .default)
@@ -98,7 +98,8 @@ class ReactionTimeChallenge: UIViewController {
         if tapArea.title(for: .normal) == startTitle {
             return
         } else if tapArea.title(for: .normal) == pressTitle {
-            let duration = Date.timeIntervalSinceReferenceDate - pressTime
+            let duration = Date().timeIntervalSince(pressTime)
+            print(Date(), pressTime)
             if duration < (PlayerRecord.current.reaction ?? .infinity) {
                 PlayerRecord.current.reaction = duration
             }

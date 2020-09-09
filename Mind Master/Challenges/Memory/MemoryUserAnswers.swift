@@ -51,6 +51,10 @@ class MemoryUserAnswers: UIViewController {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .allButUpsideDown
+    }
 
 }
 
