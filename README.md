@@ -34,7 +34,11 @@ A collection of challenges (games) that can boost one's cognitive capacity. It's
     <img src="Screenshots/memory-recall-answers.png" width=240>
     <img src="Screenshots/memory-color-answers.png" width=240>
 
-- Monochrome. This is just a variation of the “color” mode, but this time all the colors are in grayscale. In my opinion this is even harder than having a variety of colors, but I'm sure there are very smart people who can handle this challenge. Here I used the answer screen to show what kind of colors you should expect to see in this game mode. I attached both dark and light modes to show that your display preference does not negatively affect how the UI is rendered.
+    - Monochrome. This is just a variation of the “color” mode, but this time all the colors are in grayscale. In my opinion this is even harder than having a variety of colors, but I'm sure there are very smart people who can handle this challenge. Here I used the answer screen to show what kind of colors you should expect to see in this game mode. I attached both dark and light modes to show that your display preference does not negatively affect how the UI is rendered.
 
     <img src="Screenshots/memory-monochrome-result.png" width=240>
     <img src="Screenshots/memory-monochrome-light.png" width=240>
+    
+    - 2D Size. In this mode, you will need to remember the size of circles, which is hard because we humans are bad at remembering absolute information. 
+    
+    <img src="Screenshots/memory-size.png" width=240>
