@@ -17,23 +17,23 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Extend your cognitive capacity" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yrb-zW-qrc">
-                                <rect key="frame" x="102" y="631" width="210" height="18"/>
+                                <rect key="frame" x="102" y="641" width="210" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.94192957535885169" green="0.94192957535885169" blue="0.94192957535885169" alpha="0.90850929049999996" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mind Master" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I0D-sj-aUc">
-                                <rect key="frame" x="135" y="590" width="144" height="31.5"/>
+                                <rect key="frame" x="135" y="600" width="144" height="31.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="26"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="icon_dark" translatesAutoresizingMaskIntoConstraints="NO" id="duu-vZ-nyZ">
-                                <rect key="frame" x="110" y="278" width="194" height="245"/>
+                                <rect key="frame" x="100" y="273" width="214" height="260"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="450" id="8dN-t3-Ft7"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="fcS-6w-nJB"/>
-                                    <constraint firstAttribute="width" secondItem="duu-vZ-nyZ" secondAttribute="height" multiplier="1355:1708" id="p5x-HL-lfF"/>
+                                    <constraint firstAttribute="width" secondItem="duu-vZ-nyZ" secondAttribute="height" multiplier="14:17" id="p5x-HL-lfF"/>
                                 </constraints>
                             </imageView>
                         </subviews>
@@ -42,10 +42,10 @@
                             <constraint firstItem="Yrb-zW-qrc" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="FIB-hc-l29"/>
                             <constraint firstItem="Yrb-zW-qrc" firstAttribute="top" secondItem="I0D-sj-aUc" secondAttribute="bottom" constant="9.5" id="dzG-Ay-HGM"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Yrb-zW-qrc" secondAttribute="trailing" constant="40" id="eAa-Dx-fIK"/>
-                            <constraint firstItem="duu-vZ-nyZ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="110" id="eJe-Ta-6sR"/>
+                            <constraint firstItem="duu-vZ-nyZ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="100" id="eJe-Ta-6sR"/>
                             <constraint firstItem="I0D-sj-aUc" firstAttribute="top" secondItem="duu-vZ-nyZ" secondAttribute="bottom" constant="67" id="lJt-nM-dse"/>
                             <constraint firstItem="duu-vZ-nyZ" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="omY-kj-d1V"/>
-                            <constraint firstItem="duu-vZ-nyZ" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" constant="-52.5" id="pCG-nz-cJy"/>
+                            <constraint firstItem="duu-vZ-nyZ" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" constant="-50" id="pCG-nz-cJy"/>
                             <constraint firstItem="Yrb-zW-qrc" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="wp7-K6-FSk"/>
                             <constraint firstItem="I0D-sj-aUc" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="ycp-fR-xI1"/>
                         </constraints>

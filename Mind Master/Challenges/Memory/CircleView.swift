@@ -26,7 +26,7 @@ class CircleView: UIView {
     }
     
     /// How much additional space to pad the sides of the circle from the edge of the view.
-    var padding: CGFloat = 5.0 {
+    var padding: CGFloat = 1.0 {
         didSet {
             invalidateIntrinsicContentSize()
             setNeedsDisplay()

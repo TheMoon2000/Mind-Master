@@ -603,10 +603,15 @@ class MemoryChallenge: UIViewController {
             v.translatesAutoresizingMaskIntoConstraints = false
             memorizationDisplayView.addSubview(v)
             
-            v.bottomAnchor.constraint(equalTo: displayedDigit.bottomAnchor).isActive = true
+            v.centerYAnchor.constraint(equalTo: displayedDigit.centerYAnchor).isActive = true
             v.widthAnchor.constraint(equalTo: v.heightAnchor).isActive = true
             v.centerXAnchor.constraint(equalTo: memorizationDisplayView.centerXAnchor).isActive = true
-            v.heightAnchor.constraint(equalTo: displayedDigit.heightAnchor).isActive = true
+            v.heightAnchor.constraint(greaterThanOrEqualTo: displayedDigit.heightAnchor).isActive = true
+            v.leftAnchor.constraint(greaterThanOrEqualTo: memorizationDisplayView.leftAnchor, constant: 80).isActive = true
+            v.widthAnchor.constraint(lessThanOrEqualToConstant: 400).isActive = true
+            let width = v.widthAnchor.constraint(equalToConstant: 400)
+            width.priority = .defaultLow
+            width.isActive = true
             
             return v
         }()
@@ -629,7 +634,7 @@ class MemoryChallenge: UIViewController {
             bar.translatesAutoresizingMaskIntoConstraints = false
             memorizationDisplayView.addSubview(bar)
             
-            bar.topAnchor.constraint(equalTo: displayedDigit.bottomAnchor, constant: 40).isActive = true
+            bar.topAnchor.constraint(equalTo: displayedVisual.bottomAnchor, constant: 40).isActive = true
             bar.widthAnchor.constraint(equalToConstant: 200).isActive = true
             bar.centerXAnchor.constraint(equalTo: memorizationDisplayView.centerXAnchor).isActive = true
             
@@ -660,6 +665,7 @@ class MemoryChallenge: UIViewController {
             
             label.bottomAnchor.constraint(equalTo: displayProgress.topAnchor, constant: -12).isActive = true
             label.centerXAnchor.constraint(equalTo: memorizationDisplayView.centerXAnchor).isActive = true
+            label.topAnchor.constraint(greaterThanOrEqualTo: displayTimeRemaining.bottomAnchor, constant: 20).isActive = true
             
             return label
         }()
@@ -896,7 +902,7 @@ class MemoryChallenge: UIViewController {
             
             label.centerXAnchor.constraint(equalTo: resultView.centerXAnchor).isActive = true
             label.topAnchor.constraint(equalTo: resultTitle.bottomAnchor, constant: 10).isActive = true
-            let b = label.bottomAnchor.constraint(equalTo: scorePrompt.topAnchor, constant: -80)
+            let b = label.bottomAnchor.constraint(equalTo: scorePrompt.topAnchor, constant: -85)
             b.priority = .defaultHigh
             b.isActive = true
             label.bottomAnchor.constraint(lessThanOrEqualTo: scorePrompt.topAnchor, constant: -15).isActive = true
@@ -1107,9 +1113,10 @@ extension MemoryChallenge {
     }
     
     private func displayRecallScreen() {
-        recallBeginTime = Date()
-        
         let recallIndex = Int(userIndices.count)
+        if recallIndex == 0 {
+            recallBeginTime = Date()
+        }
         let recallItem = recallList[recallIndex]
         let correctIndex = correctIndices[recallIndex]
         recallIndexLabel.text = "Item \(recallIndex + 1) of \(recallList.count)"
@@ -1230,7 +1237,8 @@ extension MemoryChallenge {
                 var randomSize: CGFloat = recallSize
                 
                 /// Make sure the wrong answers aren't too close to the true answer.
-                while abs(randomSize - recallSize) < 0.1 {
+                while answerOptions.contains(where: { abs(randomSize - ($0 as! CGFloat)) < 0.09 }) ||
+                abs(randomSize - recallSize) < 0.09 {
                     randomSize = CGFloat.random(in: 0.1...0.95)
                 }
                 

@@ -117,7 +117,7 @@ class MainMenu: UIViewController {
 extension MainMenu: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -133,9 +133,6 @@ extension MainMenu: UITableViewDataSource, UITableViewDelegate {
             cell.icon.image = #imageLiteral(resourceName: "memory").withRenderingMode(.alwaysTemplate)
             cell.icon.tintColor = AppColors.memory
         case 2:
-            cell.titleLabel.text = "Pattern Finding"
-            cell.icon.image = #imageLiteral(resourceName: "pattern")
-        case 3:
             cell.titleLabel.text = "About"
             cell.icon.image = #imageLiteral(resourceName: "info")
         default:
@@ -153,7 +150,7 @@ extension MainMenu: UITableViewDataSource, UITableViewDelegate {
         case 1:
             let vc = MemoryChallenge()
             navigationController?.pushViewController(vc, animated: true)
-        case 3:
+        case 2:
             let vc = AboutPage()
             navigationController?.pushViewController(vc, animated: true)
         default:

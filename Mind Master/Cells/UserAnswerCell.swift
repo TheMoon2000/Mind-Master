@@ -214,7 +214,10 @@ class UserAnswerCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         bgView.addSubview(button)
         
-        button.widthAnchor.constraint(equalTo: bgView.widthAnchor, multiplier: 1 / 5, constant: -110 / 5).isActive = true
+        let idealWidth = button.widthAnchor.constraint(equalTo: bgView.widthAnchor, multiplier: 1 / 5, constant: -110 / 5)
+        idealWidth.priority = .defaultHigh
+        idealWidth.isActive = true
+        button.widthAnchor.constraint(lessThanOrEqualToConstant: 120).isActive = true
         button.layoutIfNeeded()
     }
     
