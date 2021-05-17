@@ -29,6 +29,10 @@ class PlayerRecord: NSObject {
     var memoryItemCount = 8 { didSet { save() } }
     var delayPerItem = 1.0 { didSet { save() } }
     
+    // Spatial challenge
+    var connectionCount = 5 { didSet { save() } }
+    var nodeCount = 6 { didSet { save() } }
+    
     /// The segment index of the memory test type.
     var memoryTestType: RecallType = .digits { didSet { save() } }
     
@@ -55,6 +59,9 @@ class PlayerRecord: NSObject {
         memoryItemCount = dictionary["memoryItemCount"]?.int ?? 8
         delayPerItem = dictionary["memoryDelay"]?.double ?? 1.0
         memoryTestType = RecallType.init(rawValue: dictionary["memoryTestType"]?.int ?? 1) ?? .digits
+        
+        connectionCount = dictionary["connectionCount"]?.int ?? 5
+        nodeCount = dictionary["vertexCount"]?.int ?? 6
     }
     
     var encodedJSON: JSON {
@@ -68,6 +75,9 @@ class PlayerRecord: NSObject {
         json.dictionaryObject?["memoryItemCount"] = memoryItemCount
         json.dictionaryObject?["memoryDelay"] = delayPerItem
         json.dictionaryObject?["memoryTestType"] = memoryTestType.rawValue
+        
+        json.dictionaryObject?["connectionCount"] = connectionCount
+        json.dictionaryObject?["vertexCount"] = nodeCount
         
         var serializedRecord = [String: Double]()
         for (length, duration) in gridRecord {

@@ -120,6 +120,15 @@ struct AppColors {
     
     /// Hyperlink color.
     static var link = UIColor(named: "AppColors.link")!
+    
+    /// Spatial memory theme color.
+    static var spatial = UIColor(named: "AppColors.spatial")!
+    
+    /// Spatial memory theme color for selection.
+    static var spatialLight = UIColor(named: "AppColors.spatialLight")!
+    
+    /// Connect-the-dots line color.
+    static var connection = UIColor(named: "AppColors.connection")!
 }
 
 
@@ -134,7 +143,7 @@ extension StringStyle {
     static let textStyle = StringStyle(
         .font(UIFont.systemFont(ofSize: 16.5)),
         .color(AppColors.label),
-        .lineHeightMultiple(1.2),
+        .lineHeightMultiple(1.15),
         .lineBreakMode(.byTruncatingTail)
     )
 }
@@ -255,3 +264,11 @@ extension String {
     }
 }
 
+extension NSLayoutConstraint {
+    
+    /// Modify the priority of the constraint and return itself.
+    func withPriority(_ priority: UILayoutPriority) -> NSLayoutConstraint {
+        self.priority = priority
+        return self
+    }
+}

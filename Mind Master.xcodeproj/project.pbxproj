@@ -9,7 +9,10 @@
 /* Begin PBXBuildFile section */
 		741873A326C195CA5410B551 /* Pods_Mind_Master.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31540F38DE69E3C8353969E4 /* Pods_Mind_Master.framework */; };
 		CC0F75D02508E882000424AB /* Privacy.md in Resources */ = {isa = PBXBuildFile; fileRef = CC0F75CF2508E882000424AB /* Privacy.md */; };
+		CC2AF66C250B6E5A00E4E98D /* ConnectTheDots.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2AF66B250B6E5A00E4E98D /* ConnectTheDots.swift */; };
+		CC2AF66E250B6E7E00E4E98D /* RingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2AF66D250B6E7E00E4E98D /* RingView.swift */; };
 		CC30631D25086D48000C5516 /* AboutPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30631C25086D48000C5516 /* AboutPage.swift */; };
+		CC5AF698250C5A23000FD4EA /* SegmentedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5AF697250C5A23000FD4EA /* SegmentedSlider.swift */; };
 		CC5FB2B92375E7C90069AEC1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2B82375E7C90069AEC1 /* AppDelegate.swift */; };
 		CC5FB2BD2375E7C90069AEC1 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2BC2375E7C90069AEC1 /* MainMenu.swift */; };
 		CC5FB2C22375E7CC0069AEC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC5FB2C12375E7CC0069AEC1 /* Assets.xcassets */; };
@@ -40,7 +43,10 @@
 /* Begin PBXFileReference section */
 		31540F38DE69E3C8353969E4 /* Pods_Mind_Master.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mind_Master.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC0F75CF2508E882000424AB /* Privacy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Privacy.md; sourceTree = "<group>"; };
+		CC2AF66B250B6E5A00E4E98D /* ConnectTheDots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectTheDots.swift; sourceTree = "<group>"; };
+		CC2AF66D250B6E7E00E4E98D /* RingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingView.swift; sourceTree = "<group>"; };
 		CC30631C25086D48000C5516 /* AboutPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPage.swift; sourceTree = "<group>"; };
+		CC5AF697250C5A23000FD4EA /* SegmentedSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedSlider.swift; sourceTree = "<group>"; };
 		CC5FB2B52375E7C90069AEC1 /* Mind Master.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mind Master.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC5FB2B82375E7C90069AEC1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CC5FB2BC2375E7C90069AEC1 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
@@ -104,6 +110,15 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		CC2AF66A250B6E3A00E4E98D /* Spatial memory */ = {
+			isa = PBXGroup;
+			children = (
+				CC2AF66B250B6E5A00E4E98D /* ConnectTheDots.swift */,
+				CC2AF66D250B6E7E00E4E98D /* RingView.swift */,
+			);
+			path = "Spatial memory";
+			sourceTree = "<group>";
+		};
 		CC5FB2AC2375E7C90069AEC1 = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +150,7 @@
 				CC5FB2BC2375E7C90069AEC1 /* MainMenu.swift */,
 				CCF92C6B238913BC002BBE09 /* Queue.swift */,
 				CC30631C25086D48000C5516 /* AboutPage.swift */,
+				CC5AF697250C5A23000FD4EA /* SegmentedSlider.swift */,
 				CC5FB2DD237602900069AEC1 /* Objective-C */,
 				CC5FB2D32375F69B0069AEC1 /* Challenges */,
 				CC5FB2CC2375E7FD0069AEC1 /* Cells */,
@@ -159,6 +175,7 @@
 		CC5FB2D32375F69B0069AEC1 /* Challenges */ = {
 			isa = PBXGroup;
 			children = (
+				CC2AF66A250B6E3A00E4E98D /* Spatial memory */,
 				CC7195642387D4A50018B6F6 /* Reaction */,
 				CC7195652387D4B00018B6F6 /* Memory */,
 			);
@@ -330,6 +347,7 @@
 				CC5FB2D22375EBC10069AEC1 /* TintedNavController.swift in Sources */,
 				CC30631D25086D48000C5516 /* AboutPage.swift in Sources */,
 				CCF92C62238898F8002BBE09 /* GridHighscoreEntry.swift in Sources */,
+				CC2AF66E250B6E7E00E4E98D /* RingView.swift in Sources */,
 				CC5FB2D02375E8530069AEC1 /* Global Constants.swift in Sources */,
 				CCA6784A25012AAF006034C0 /* CircleView.swift in Sources */,
 				CCB7937F238C86DC00C51AE6 /* UserAnswerCell.swift in Sources */,
@@ -338,7 +356,9 @@
 				CCF92C6A238909C7002BBE09 /* FallingColor.swift in Sources */,
 				CC5FB2D52375F6B10069AEC1 /* ReactionTimeChallenge.swift in Sources */,
 				CC5FB2DB2376028A0069AEC1 /* NSString+AESCrypt.m in Sources */,
+				CC5AF698250C5A23000FD4EA /* SegmentedSlider.swift in Sources */,
 				CCF92C60238897A5002BBE09 /* GridHighScores.swift in Sources */,
+				CC2AF66C250B6E5A00E4E98D /* ConnectTheDots.swift in Sources */,
 				CCF92C642388B09A002BBE09 /* ColorDodgeChallenge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -117,7 +117,7 @@ class MainMenu: UIViewController {
 extension MainMenu: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -129,10 +129,14 @@ extension MainMenu: UITableViewDataSource, UITableViewDelegate {
             cell.icon.image = #imageLiteral(resourceName: "timer").withRenderingMode(.alwaysTemplate)
             cell.icon.tintColor = AppColors.reaction
         case 1:
-            cell.titleLabel.text = "Short-term Memory"
+            cell.titleLabel.text = "Sequential Recall"
             cell.icon.image = #imageLiteral(resourceName: "memory").withRenderingMode(.alwaysTemplate)
             cell.icon.tintColor = AppColors.memory
         case 2:
+            cell.titleLabel.text = "Spatial Recall"
+            cell.icon.image = #imageLiteral(resourceName: "connect_the_dots").withRenderingMode(.alwaysTemplate)
+            cell.icon.tintColor = AppColors.spatial
+        case 3:
             cell.titleLabel.text = "About"
             cell.icon.image = #imageLiteral(resourceName: "info")
         default:
@@ -151,6 +155,9 @@ extension MainMenu: UITableViewDataSource, UITableViewDelegate {
             let vc = MemoryChallenge()
             navigationController?.pushViewController(vc, animated: true)
         case 2:
+            let vc = ConnectTheDots()
+            navigationController?.pushViewController(vc, animated: true)
+        case 3:
             let vc = AboutPage()
             navigationController?.pushViewController(vc, animated: true)
         default:

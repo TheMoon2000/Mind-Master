@@ -218,7 +218,7 @@ class MemoryChallenge: UIViewController {
             
             label.leftAnchor.constraint(equalTo: startView.leftAnchor, constant: 25).isActive = true
             label.rightAnchor.constraint(equalTo: startView.rightAnchor, constant: -25).isActive = true
-            label.topAnchor.constraint(equalTo: startView.topAnchor, constant: 25).isActive = true
+            label.topAnchor.constraint(equalTo: startView.topAnchor, constant: 20).isActive = true
             
             label.setContentHuggingPriority(.required, for: .vertical)
             label.setContentCompressionResistancePriority(.required, for: .vertical)
