@@ -129,6 +129,12 @@ struct AppColors {
     
     /// Connect-the-dots line color.
     static var connection = UIColor(named: "AppColors.connection")!
+    
+    /// Color for incorrect answers.
+    static var incorrect = UIColor(named: "AppColors.incorrect")!
+    
+    /// Color for incorrect answers.
+    static var correct = UIColor(named: "AppColors.correct")!
 }
 
 

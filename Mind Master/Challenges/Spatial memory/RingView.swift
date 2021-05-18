@@ -11,7 +11,7 @@ import UIKit
 class RingView: UIView {
     
     /// The total number of dots on the ring. If changed, it will clear everything else.
-    var numberOfDots = 0 {
+    var numberOfDots = 8 {
         didSet {
             if oldValue != numberOfDots {
                 selectedPosition = nil
@@ -43,7 +43,16 @@ class RingView: UIView {
     private var sourceIsActivelySelected = false
     
     /// The dots which are connected.
-    private(set) var connections = Set<Connection>()
+    var connections = Set<Connection>() {
+        didSet { setNeedsDisplay() }
+    }
+    
+    var wrongConnections = Set<Connection>() {
+        didSet { setNeedsDisplay() }
+    }
+    var absentConnections = Set<Connection>() {
+        didSet { setNeedsDisplay() }
+    }
     
     // MARK: Colors
     
@@ -63,7 +72,15 @@ class RingView: UIView {
     }
     
     /// The color of the connection lines.
-    var connectionColor: UIColor = AppColors.connection {
+    var connectionColor: UIColor = AppColors.connection.withAlphaComponent(0.9) {
+        didSet { setNeedsDisplay() }
+    }
+    
+    var wrongColor: UIColor = AppColors.incorrect.withAlphaComponent(0.9) {
+        didSet { setNeedsDisplay() }
+    }
+    
+    var missingColor: UIColor = AppColors.lightControl.withAlphaComponent(0.9) {
         didSet { setNeedsDisplay() }
     }
     
@@ -76,21 +93,21 @@ class RingView: UIView {
     
     /// The radius of a dot.
     private var dotRadius: CGFloat {
-        return max(ringWidth + 5, min(35, bounds.width / 32 - CGFloat(numberOfDots) / 4 + 4))
+        return max(ringWidth + 5, min(35, bounds.width / 30 - CGFloat(numberOfDots) / 4 + 4))
     }
     
     /// The radius of the selection.
     private var selectionWidth: CGFloat {
-        return max(5, min(20, dotRadius / 4))
+        return max(5, min(25, dotRadius / 3))
     }
     
     /// The distance in pixels between the dot and its selection ring.
     private var selectionSpacing: CGFloat {
-        return max(3, selectionWidth)
+        return max(3, selectionWidth + 1)
     }
     
     private var connectionWidth: CGFloat {
-        return max(5, min(20, bounds.width / 100))
+        return max(5, dotRadius * 0.4)
     }
     
     /// The radius of the ring, measured by the stroke line.
@@ -112,11 +129,6 @@ class RingView: UIView {
         addGestureRecognizer(UIRotationGestureRecognizer(target: self, action: #selector(didRotate(_:))))
     }
     
-    func addConnections(_ connections: Set<Connection>) {
-        self.connections.formUnion(connections)
-        setNeedsDisplay()
-    }
-
     override func draw(_ rect: CGRect) {
         
         guard bounds.width >= 100 else { return }
@@ -137,7 +149,7 @@ class RingView: UIView {
             
             if selectedPosition == i
                 || (draggedPosition?.distance(to: points[i]) ?? .infinity) < visibleRadius(at: i) {
-                let outer = UIBezierPath(arcCenter: points[i], radius: dotRadius + selectionSpacing * 2 + selectionWidth, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+                let outer = UIBezierPath(arcCenter: points[i], radius: dotRadius + selectionSpacing * 1.5 + selectionWidth, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
                 AppColors.background.setFill()
                 outer.fill()
                 
@@ -169,12 +181,32 @@ class RingView: UIView {
         }
         
         // Draw the connections
-        for conn in connections {
+        for conn in connections where max(conn.indexA, conn.indexB) < numberOfDots {
             let path = UIBezierPath()
             path.move(to: pointAt(index: conn.indexA))
             path.addLine(to: pointAt(index: conn.indexB))
             path.lineWidth = connectionWidth
             connectionColor.setStroke()
+            path.stroke()
+        }
+        
+        // Draw the incorrect connections
+        for conn in wrongConnections where max(conn.indexA, conn.indexB) < numberOfDots {
+            let path = UIBezierPath()
+            path.move(to: pointAt(index: conn.indexA))
+            path.addLine(to: pointAt(index: conn.indexB))
+            path.lineWidth = connectionWidth
+            wrongColor.setStroke()
+            path.stroke()
+        }
+        
+        // Draw the missing connections
+        for conn in absentConnections where max(conn.indexA, conn.indexB) < numberOfDots {
+            let path = UIBezierPath()
+            path.move(to: pointAt(index: conn.indexA))
+            path.addLine(to: pointAt(index: conn.indexB))
+            path.lineWidth = connectionWidth
+            missingColor.setStroke()
             path.stroke()
         }
         
@@ -215,6 +247,63 @@ class RingView: UIView {
             rotationAngle += rotationDelta
             rotationDelta = 0
         }
+    }
+    
+    func bestAlignment(for otherConnections: Set<Connection>) -> Int {
+        var bestF1 = 0.0
+        var bestOrientation = 0
+        for i in 0..<numberOfDots {
+            let normalized = otherConnections.map { Connection(($0.indexA + i) % numberOfDots,
+                                                               ($0.indexB + i) % numberOfDots) }
+            let p = fixedPrecision(with: normalized)
+            let r = fixedRecall(with: normalized)
+            if f1(p, r) > bestF1 {
+                bestF1 = f1(p, r)
+                bestOrientation = i
+            }
+        }
+        return bestOrientation
+    }
+    
+    func bestStats(with otherConnections: Set<Connection>) -> (precision: Double, recall: Double, similarity: Double) {
+        
+        let i = bestAlignment(for: otherConnections)
+        let normalized = otherConnections.map { Connection(($0.indexA + i) % numberOfDots,
+                                                           ($0.indexB + i) % numberOfDots) }
+        
+        let bestP = fixedPrecision(with: normalized)
+        let bestR = fixedRecall(with: normalized)
+        let bestF1 = f1(bestP, bestR)
+        
+        return (bestP, bestR, bestF1.isNaN ? 0.0 : bestF1)
+    }
+    
+    private func fixedPrecision(with otherConnections: [Connection]) -> Double {
+
+        let sameCount = self.connections.intersection(otherConnections).count
+        return Double(sameCount) / Double(otherConnections.count)
+    }
+    
+    private func fixedRecall(with otherConnections: [Connection]) -> Double {
+        let sameCount = self.connections.intersection(otherConnections).count
+        return Double(sameCount) / Double(connections.count)
+    }
+
+    private func f1(_ precision: Double, _ recall: Double) -> Double {
+        return 2 * precision * recall / (precision + recall)
+    }
+    
+    func alignedConnections(at offset: Int) -> Set<Connection> {
+        return Set(connections.map { Connection(($0.indexA + offset) % numberOfDots,
+                                                ($0.indexB + offset) % numberOfDots) })
+    }
+    
+    func reset() {
+        connections.removeAll()
+        wrongConnections.removeAll()
+        absentConnections.removeAll()
+        rotationAngle = 0
+        rotationDelta = 0
     }
 
 }
@@ -264,9 +353,9 @@ extension RingView {
             if touch.location(in: self).distance(to: points[i]) < visibleRadius(at: i) {
                 if selectedPosition != i {
                     UISelectionFeedbackGenerator().selectionChanged()
+                    let new = Connection(i, selectedPosition!)
+                    connections.formSymmetricDifference([new])
                 }
-                let new = Connection(i, selectedPosition!)
-                connections.formSymmetricDifference([new])
                 if selectedPosition == i && sourceIsActivelySelected {
                     sourceIsActivelySelected = false
                     return
@@ -279,24 +368,3 @@ extension RingView {
     }
 }
 
-/// An internal class that represents a connection between two dots on a ring.
-struct Connection: Hashable, Equatable {
-    
-    /// The first point
-    let indexA: Int
-    let indexB: Int
-    
-    init(_ indexA: Int, _ indexB: Int) {
-        self.indexA = min(indexA, indexB)
-        self.indexB = max(indexA, indexB)
-    }
-    
-    static func ==(lhs: Connection, rhs: Connection) -> Bool {
-        return lhs.indexA == rhs.indexA && lhs.indexB == rhs.indexB
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(indexA)
-        hasher.combine(indexB)
-    }
-}

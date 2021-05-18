@@ -1293,7 +1293,7 @@ extension MemoryChallenge {
             } else if correctPercentage >= 0.7 {
                 resultTitle.text = "Satisfactory - You got \(rounded)% correct."
             } else {
-                resultTitle.text = "Oops. \(rounded)% was not a pass."
+                resultTitle.text = "Oops, you only got \(rounded)% correct."
             }
             
             let totalDuration = Date().timeIntervalSince(recallBeginTime)

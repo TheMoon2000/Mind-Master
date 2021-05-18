@@ -25,6 +25,8 @@
 		CC5FB2DC2376028A0069AEC1 /* NSData+AESCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2DA2376028A0069AEC1 /* NSData+AESCrypt.m */; };
 		CC5FB2DF237602D20069AEC1 /* PlayerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2DE237602D20069AEC1 /* PlayerRecord.swift */; };
 		CC5FB2E12376273D0069AEC1 /* MemoryChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5FB2E02376273D0069AEC1 /* MemoryChallenge.swift */; };
+		CC61754E2653815600C13BC7 /* GraphUserAnswers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC61754D2653815600C13BC7 /* GraphUserAnswers.swift */; };
+		CC6175512653889100C13BC7 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6175502653889100C13BC7 /* Connection.swift */; };
 		CC7195632387D1C80018B6F6 /* ReactionChallengeMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7195622387D1C80018B6F6 /* ReactionChallengeMenu.swift */; };
 		CCA6784A25012AAF006034C0 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA6784925012AAF006034C0 /* CircleView.swift */; };
 		CCB79375238BB6F700C51AE6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = CCB79374238BB6F700C51AE6 /* README.md */; };
@@ -64,6 +66,8 @@
 		CC5FB2DA2376028A0069AEC1 /* NSData+AESCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AESCrypt.m"; sourceTree = "<group>"; };
 		CC5FB2DE237602D20069AEC1 /* PlayerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerRecord.swift; sourceTree = "<group>"; };
 		CC5FB2E02376273D0069AEC1 /* MemoryChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryChallenge.swift; sourceTree = "<group>"; };
+		CC61754D2653815600C13BC7 /* GraphUserAnswers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphUserAnswers.swift; sourceTree = "<group>"; };
+		CC6175502653889100C13BC7 /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		CC7195622387D1C80018B6F6 /* ReactionChallengeMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionChallengeMenu.swift; sourceTree = "<group>"; };
 		CCA6784925012AAF006034C0 /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		CCB79374238BB6F700C51AE6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -114,7 +118,9 @@
 			isa = PBXGroup;
 			children = (
 				CC2AF66B250B6E5A00E4E98D /* ConnectTheDots.swift */,
+				CC61754D2653815600C13BC7 /* GraphUserAnswers.swift */,
 				CC2AF66D250B6E7E00E4E98D /* RingView.swift */,
+				CC6175502653889100C13BC7 /* Connection.swift */,
 			);
 			path = "Spatial memory";
 			sourceTree = "<group>";
@@ -348,11 +354,13 @@
 				CC30631D25086D48000C5516 /* AboutPage.swift in Sources */,
 				CCF92C62238898F8002BBE09 /* GridHighscoreEntry.swift in Sources */,
 				CC2AF66E250B6E7E00E4E98D /* RingView.swift in Sources */,
+				CC61754E2653815600C13BC7 /* GraphUserAnswers.swift in Sources */,
 				CC5FB2D02375E8530069AEC1 /* Global Constants.swift in Sources */,
 				CCA6784A25012AAF006034C0 /* CircleView.swift in Sources */,
 				CCB7937F238C86DC00C51AE6 /* UserAnswerCell.swift in Sources */,
 				CC5FB2E12376273D0069AEC1 /* MemoryChallenge.swift in Sources */,
 				CC5FB2DC2376028A0069AEC1 /* NSData+AESCrypt.m in Sources */,
+				CC6175512653889100C13BC7 /* Connection.swift in Sources */,
 				CCF92C6A238909C7002BBE09 /* FallingColor.swift in Sources */,
 				CC5FB2D52375F6B10069AEC1 /* ReactionTimeChallenge.swift in Sources */,
 				CC5FB2DB2376028A0069AEC1 /* NSString+AESCrypt.m in Sources */,
