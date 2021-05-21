@@ -140,29 +140,21 @@ class MemoryChallenge: UIViewController {
             v.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(v)
             
-            v.widthAnchor.constraint(lessThanOrEqualToConstant: 500).isActive = true
+            v.widthAnchor.constraint(lessThanOrEqualToConstant: 600).isActive = true
             v.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
             v.leftAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.leftAnchor, constant: 30).isActive = true
             v.rightAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
             
-            let l = v.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 30)
-            l.priority = .defaultHigh
-            l.isActive = true
+            v.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 30).withPriority(.defaultHigh).isActive = true
             
-            let r = v.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -30)
-            r.priority = .defaultHigh
-            r.isActive = true
+            v.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -30).withPriority(.defaultHigh).isActive = true
             
             v.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
             v.heightAnchor.constraint(lessThanOrEqualToConstant: 1000).isActive = true
             
-            let t = v.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30)
-            t.priority = .defaultHigh
-            t.isActive = true
+            v.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).withPriority(.defaultHigh).isActive = true
             
-            let b = v.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
-            b.priority = .defaultHigh
-            b.isActive = true
+            v.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).withPriority(.defaultHigh).isActive = true
             
             return v
         }()
@@ -197,7 +189,30 @@ class MemoryChallenge: UIViewController {
         
         memorizationDisplayView = makeBlankView()
         recallView = makeBlankView()
-        resultView = makeBlankView()
+        resultView = {
+            let v = UIView()
+            v.isHidden = true
+            v.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(v)
+            
+            v.widthAnchor.constraint(lessThanOrEqualToConstant: 600).isActive = true
+            v.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+            v.leftAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.leftAnchor, constant: 30).isActive = true
+            v.rightAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
+            
+            v.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 30).withPriority(.defaultHigh).isActive = true
+            
+            v.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -30).withPriority(.defaultHigh).isActive = true
+            
+            v.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
+            v.heightAnchor.constraint(lessThanOrEqualToConstant: 1000).isActive = true
+            
+            v.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).withPriority(.defaultHigh).isActive = true
+            
+            v.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).withPriority(.defaultHigh).isActive = true
+            
+            return v
+        }()
         
         setupStartView()
         setupCountdownView()
@@ -468,9 +483,7 @@ class MemoryChallenge: UIViewController {
             
             button.topAnchor.constraint(greaterThanOrEqualTo: testTypePrompt.bottomAnchor, constant: 10).isActive = true
             
-            let b = button.bottomAnchor.constraint(equalTo: startView.bottomAnchor, constant: -10)
-            b.priority = .defaultHigh
-            b.isActive = true
+            button.bottomAnchor.constraint(equalTo: startView.bottomAnchor, constant: -10).withPriority(.defaultHigh).isActive = true
             
             button.widthAnchor.constraint(equalToConstant: 220).isActive = true
             button.heightAnchor.constraint(equalToConstant: 48).isActive = true
@@ -1018,7 +1031,6 @@ extension MemoryChallenge {
     
     
     @objc private func beginTest(_ sender: UIButton) {
-        
         countdownFrom = 3
         countdownDigit.text = "3"
         countdownSubtitle.text = "Difficulty: \(PlayerRecord.current.memoryItemCount) items, \(String(format: "%.1f", PlayerRecord.current.delayPerItem))s per item"
@@ -1286,6 +1298,7 @@ extension MemoryChallenge {
             let rounded = Int(round(correctPercentage * 100))
             if correctPercentage == 1.0 {
                 resultTitle.text = "Perfect! 100% Correct!"
+                generateConfetti()
             } else if correctPercentage >= 0.9 {
                 resultTitle.text = "Excellent! \(rounded)% Correct!"
             } else if correctPercentage >= 0.8 {
@@ -1324,10 +1337,53 @@ extension MemoryChallenge {
         resultView.isHidden = true
     }
     
+    private func generateConfetti() {
+        
+        let particlesLayer = CAEmitterLayer()
+
+        view.layer.addSublayer(particlesLayer)
+
+        particlesLayer.backgroundColor = UIColor.clear.cgColor
+        particlesLayer.emitterShape = .line
+        particlesLayer.emitterPosition = CGPoint(x: view.frame.midX, y: view.safeAreaLayoutGuide.layoutFrame.minY + 15)
+        particlesLayer.emitterSize = .init(width: resultView.frame.width, height: 1)
+
+
+        let cell1 = CAEmitterCell()
+        cell1.birthRate = 20.0
+        cell1.lifetime = 6
+        cell1.scale = 1
+        cell1.yAcceleration = 100
+
+        let subcells: [CAEmitterCell] = [#imageLiteral(resourceName: "1"), #imageLiteral(resourceName: "2"), #imageLiteral(resourceName: "3"), #imageLiteral(resourceName: "4"), #imageLiteral(resourceName: "5"), #imageLiteral(resourceName: "6"), #imageLiteral(resourceName: "7"), #imageLiteral(resourceName: "8")].map {
+            let cell = CAEmitterCell()
+            cell.contents = $0.cgImage
+            cell.birthRate = 50
+            cell.lifetime = 10.0
+            cell.beginTime = 0.0
+            cell.duration = 0.1
+            cell.velocity = 100.0
+            cell.yAcceleration = 85.0
+            cell.emissionRange = 360.0 * (.pi / 180.0)
+            cell.spin = 2 * .pi
+            cell.spinRange = 0.5 * .pi
+            cell.scale = 0.12
+            cell.scaleRange = 0.05
+            cell.alphaSpeed = -0.5
+            
+            return cell
+        }
+
+        cell1.emitterCells = subcells
+
+        particlesLayer.emitterCells = [cell1]
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+             particlesLayer.birthRate = 0.0
+        }
+    }
+    
     @objc private func viewAnswers() {
-        
-        navigationItem.backBarButtonItem = .init(title: "Results", style: .plain, target: nil, action: nil)
-        
         let vc = MemoryUserAnswers(parent: self)
         navigationController?.pushViewController(vc, animated: true)
     }

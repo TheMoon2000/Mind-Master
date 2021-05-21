@@ -66,17 +66,22 @@ class ConnectTheDots: UIViewController {
         v.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(v)
         
-        v.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 30).isActive = true
-        v.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
-        v.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
-        v.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30).isActive = true
-        
+        v.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        v.leftAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.leftAnchor, constant: 30).isActive = true
+        v.rightAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
+        v.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 30).withPriority(.defaultHigh).isActive = true
+        v.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
+        v.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).withPriority(.defaultHigh).isActive = true
+        v.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
+            
         return v
     }
     
     
     private func setupStartView() {
         startView = makeBlankView()
+        startView.widthAnchor.constraint(lessThanOrEqualToConstant: 700).isActive = true
+        startView.heightAnchor.constraint(lessThanOrEqualToConstant: 1000).isActive = true
         startView.isHidden = false
         
         welcomeMessage = {
@@ -210,9 +215,7 @@ class ConnectTheDots: UIViewController {
             
             button.topAnchor.constraint(greaterThanOrEqualTo: nodesSlider.bottomAnchor, constant: 10).isActive = true
             
-            let b = button.bottomAnchor.constraint(equalTo: startView.bottomAnchor, constant: -10)
-            b.priority = .defaultHigh
-            b.isActive = true
+            button.bottomAnchor.constraint(equalTo: startView.bottomAnchor, constant: -10).withPriority(.defaultHigh).isActive = true
             
             button.widthAnchor.constraint(equalToConstant: 220).isActive = true
             button.heightAnchor.constraint(equalToConstant: 48).isActive = true
@@ -314,6 +317,7 @@ class ConnectTheDots: UIViewController {
             ring.translatesAutoresizingMaskIntoConstraints = false
             recallView.addSubview(ring)
             
+            ring.widthAnchor.constraint(lessThanOrEqualToConstant: 800).isActive = true
             ring.topAnchor.constraint(greaterThanOrEqualTo: recallPrompt.bottomAnchor, constant: 10).isActive = true
             ring.centerXAnchor.constraint(equalTo: recallView.centerXAnchor).isActive = true
             ring.centerYAnchor.constraint(equalTo: recallView.centerYAnchor, constant: 20).isActive = true
@@ -351,6 +355,8 @@ class ConnectTheDots: UIViewController {
     
     private func setupResultsView() {
         resultView = makeBlankView()
+        resultView.widthAnchor.constraint(lessThanOrEqualToConstant: 700).isActive = true
+        resultView.heightAnchor.constraint(lessThanOrEqualToConstant: 1000).isActive = true
         
         resultTitle = {
             let label = UILabel()
@@ -465,11 +471,10 @@ class ConnectTheDots: UIViewController {
         let particlesLayer = CAEmitterLayer()
 
         view.layer.addSublayer(particlesLayer)
-        view.layer.masksToBounds = true
 
         particlesLayer.backgroundColor = UIColor.clear.cgColor
         particlesLayer.emitterShape = .line
-        particlesLayer.emitterPosition = CGPoint(x: view.frame.midX, y: resultView.frame.minY)
+        particlesLayer.emitterPosition = CGPoint(x: view.frame.midX, y: view.safeAreaLayoutGuide.layoutFrame.minY + 15)
         particlesLayer.emitterSize = .init(width: recallView.frame.width, height: 1)
 
 
@@ -477,6 +482,7 @@ class ConnectTheDots: UIViewController {
         cell1.birthRate = 20.0
         cell1.lifetime = 6
         cell1.scale = 1
+        cell1.yAcceleration = 100
 
         let subcells: [CAEmitterCell] = [#imageLiteral(resourceName: "1"), #imageLiteral(resourceName: "2"), #imageLiteral(resourceName: "3"), #imageLiteral(resourceName: "4"), #imageLiteral(resourceName: "5"), #imageLiteral(resourceName: "6"), #imageLiteral(resourceName: "7"), #imageLiteral(resourceName: "8")].map {
             let cell = CAEmitterCell()

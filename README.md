@@ -1,5 +1,5 @@
 # Mind Master
-A collection of challenges (games) that can boost one's cognitive capacity. It's the 2nd generation of “Brain Trainer.”
+A collection of challenges (games) that can boost one's cognitive capacity. It's the 2nd generation of “Brain Trainer.” You may find it on the App Store via [this link](https://apps.apple.com/us/app/id1531046179#?platform=iphone).
 
 ## Current Challenges
 - Reaction type challenges
@@ -42,3 +42,12 @@ A collection of challenges (games) that can boost one's cognitive capacity. It's
     - 2D Size. In this mode, you will need to remember the size of circles, which is hard because we humans are bad at remembering absolute information. 
     
     <img src="Screenshots/memory-size.png" width=240>
+
+
+    - Undirected graphs. In this mode, you will be asked to memorize the edges of a graph. This challenge tests your ability to remember spatial information (as opposed to sequential information). Directed graphs may be coming soon.
+    
+    <img src="Screenshots/undirected-graph.png" width=240>
+    <img src="Screenshots/undirected-graph-recall.png" width=240>
+    <img src="Screenshots/undirected-graph-answer.png" width=240>
+    
+    
