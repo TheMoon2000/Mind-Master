@@ -15,21 +15,25 @@ struct Connection: Hashable, Equatable, CustomStringConvertible {
     let indexA: Int
     let indexB: Int
     
+    var smallerIndex: Int { min(indexA, indexB) }
+    var largerIndex: Int { max(indexA, indexB) }
+    
     init(_ indexA: Int, _ indexB: Int) {
-        self.indexA = min(indexA, indexB)
-        self.indexB = max(indexA, indexB)
+        self.indexA = indexA
+        self.indexB = indexB
     }
     
     static func ==(lhs: Connection, rhs: Connection) -> Bool {
-        return lhs.indexA == rhs.indexA && lhs.indexB == rhs.indexB
+        return (lhs.smallerIndex, lhs.largerIndex) == (rhs.smallerIndex, rhs.largerIndex)
     }
     
+    // Note that both directions of directed edge have the same hash value.
     func hash(into hasher: inout Hasher) {
-        hasher.combine(indexA)
-        hasher.combine(indexB)
+        hasher.combine(smallerIndex)
+        hasher.combine(largerIndex)
     }
     
     var description: String {
-        return "<\(indexA) - \(indexB)>"
+        return "<\(indexA) -> \(indexB)>"
     }
 }

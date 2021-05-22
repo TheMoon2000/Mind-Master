@@ -30,8 +30,8 @@ class AboutPage: UIViewController {
         
         textView = {
             let tv = UITextView()
-            tv.contentInset.top = 15
-            tv.contentInset.bottom = 15
+            tv.contentInset.top = 20
+            tv.contentInset.bottom = 20
             tv.isEditable = false
             tv.backgroundColor = .clear
             tv.translatesAutoresizingMaskIntoConstraints = false
@@ -49,6 +49,10 @@ class AboutPage: UIViewController {
 ## Privacy Policy
         
 Mind Master is an app that helps you to practice a variety of cognitive abilities, especially memory. It is designed as a fully offline app, and **does not** collect personal information about you.
+
+## Source
+
+This app is open source. You can checkout my code at https://github.com/TheMoon2000/Mind-Master.
 """.attributedText(style: style)
         textView.textColor = AppColors.label
     }

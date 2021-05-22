@@ -12,6 +12,7 @@ class GraphUserAnswers: UIViewController {
     
     private var userConnections: Set<Connection>!
     private var trueConnections: Set<Connection>!
+    private(set) var directed: Bool!
     private var titleLabel: UILabel!
     private var messageLabel: UILabel!
     private var answerRing: RingView!
@@ -24,14 +25,30 @@ class GraphUserAnswers: UIViewController {
     private var missingKey: UIView!
     private var missingLabel: UILabel!
     
+    /// The number of correct edges and directions reconstructed by the user.
+    private var correctCount: (edges: Int, directions: Int) {
+        return (answerRing.connections.count, answerRing.rightDirections.count)
+    }
+    
+    /// The number of incorrect edges.
+    private var incorrectCount: (edges: Int, directions: Int) {
+        return (answerRing.wrongConnections.count, answerRing.wrongConnections.count + answerRing.wrongDirections.count)
+    }
+    
+    /// The number of absent edges.
+    private var absentCount: (edges: Int, directions: Int) {
+        return (answerRing.absentConnections.count, answerRing.absentConnections.count + answerRing.wrongDirections.count)
+    }
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
     
-    required init(userCon: Set<Connection>, trueCon: Set<Connection>) {
+    required init(userCon: Set<Connection>, trueCon: Set<Connection>, directed: Bool) {
         super.init(nibName: nil, bundle: nil)
         self.userConnections = userCon
         self.trueConnections = trueCon
+        self.directed = directed
     }
 
     override func viewDidLoad() {
@@ -81,11 +98,34 @@ class GraphUserAnswers: UIViewController {
         
         answerRing = {
             let ring = RingView()
+            ring.directed = directed
             ring.numberOfDots = PlayerRecord.current.nodeCount
             ring.editable = false
-            ring.wrongConnections = userConnections.subtracting(trueConnections)
-            ring.connections = userConnections.intersection(trueConnections)
             ring.absentConnections = trueConnections.subtracting(userConnections)
+            
+            // Check if any of the correct edges are wrong in direction
+            var sameConnections = trueConnections.intersection(userConnections)
+            var wrongDirections = Set<Connection>()
+            var wrongConnections = Set<Connection>()
+            var rightDirections = Set<Connection>()
+            var rightConnections = Set<Connection>()
+            for uc in userConnections {
+                if let trueCon = sameConnections.remove(uc) {
+                    rightConnections.insert(uc)
+                    if uc.indexA != trueCon.indexA {
+                        wrongDirections.insert(uc)
+                    } else {
+                        rightDirections.insert(uc)
+                    }
+                } else {
+                    wrongConnections.insert(uc)
+                }
+            }
+            ring.connections = rightConnections
+            ring.rightDirections = rightDirections
+            ring.wrongConnections = wrongConnections
+            ring.wrongDirections = wrongDirections
+                        
             ring.connectionColor = AppColors.correct.withAlphaComponent(0.9)
             ring.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(ring)
@@ -129,7 +169,11 @@ class GraphUserAnswers: UIViewController {
         
         correctLabel = {
             let label = UILabel()
-            label.text = "Correct (\(userConnections.intersection(trueConnections).count) total)"
+            if directed {
+                label.text = "Correct (\(correctCount.edges) edges, \(correctCount.directions) directions)"
+            } else {
+                label.text = "Correct (\(correctCount.edges) edges)"
+            }
             label.textColor = AppColors.label
             label.translatesAutoresizingMaskIntoConstraints = false
             legends.addSubview(label)
@@ -159,7 +203,11 @@ class GraphUserAnswers: UIViewController {
         
         incorrectLabel = {
             let label = UILabel()
-            label.text = "Extra (\(userConnections.subtracting(trueConnections).count) total)"
+            if directed {
+                label.text = "Extra (\(incorrectCount.edges) edges, \(incorrectCount.directions) directions)"
+            } else {
+                label.text = "Extra (\(incorrectCount.edges) edges)"
+            }
             label.textColor = AppColors.label
             label.translatesAutoresizingMaskIntoConstraints = false
             legends.addSubview(label)
@@ -189,7 +237,11 @@ class GraphUserAnswers: UIViewController {
         
         missingLabel = {
             let label = UILabel()
-            label.text = "Missing (\(trueConnections.subtracting(userConnections).count) total)"
+            if directed {
+                label.text = "Missing (\(absentCount.edges) edges, \(absentCount.directions) directions)"
+            } else {
+                label.text = "Missing (\(absentCount.edges) edge)"
+            }
             label.textColor = AppColors.label
             label.translatesAutoresizingMaskIntoConstraints = false
             legends.addSubview(label)

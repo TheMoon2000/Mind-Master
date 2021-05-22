@@ -19,6 +19,8 @@ class ConnectTheDots: UIViewController {
     private var numberOfNodesLabel: UILabel!
     private var numberOfNodes: UILabel!
     private var nodesSlider: SegmentedSlider!
+    private var useDirectedEdgesLabel: UILabel!
+    private var useDirectedEdgesSwitch: UISwitch!
     private var beginButton: UIButton!
     
     // MARK: Display view UI elements
@@ -160,7 +162,7 @@ class ConnectTheDots: UIViewController {
             startView.addSubview(label)
             
             label.leftAnchor.constraint(greaterThanOrEqualTo: welcomeMessage.leftAnchor).isActive = true
-            label.topAnchor.constraint(equalTo: edgeSlider.bottomAnchor, constant: 25).isActive = true
+            label.topAnchor.constraint(equalTo: edgeSlider.bottomAnchor, constant: 20).isActive = true
             
             label.setContentHuggingPriority(.required, for: .horizontal)
             
@@ -203,6 +205,35 @@ class ConnectTheDots: UIViewController {
             return sliderView
         }()
         
+        useDirectedEdgesLabel = {
+            let label = UILabel()
+            label.textColor = AppColors.label
+            label.text = "Use directed edges:"
+            label.font = .systemFont(ofSize: 17, weight: .medium)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            startView.addSubview(label)
+            
+            label.leftAnchor.constraint(greaterThanOrEqualTo: welcomeMessage.leftAnchor).isActive = true
+            label.topAnchor.constraint(equalTo: nodesSlider.bottomAnchor, constant: 20).isActive = true
+            
+            label.setContentHuggingPriority(.required, for: .horizontal)
+            
+            return label
+        }()
+        
+        useDirectedEdgesSwitch = {
+            let sw = UISwitch()
+            sw.isOn = PlayerRecord.current.isDirected
+            sw.translatesAutoresizingMaskIntoConstraints = false
+            sw.addTarget(self, action: #selector(toggleDirectedness), for: .valueChanged)
+            startView.addSubview(sw)
+            
+            sw.rightAnchor.constraint(equalTo: welcomeMessage.rightAnchor).isActive = true
+            sw.centerYAnchor.constraint(equalTo: useDirectedEdgesLabel.centerYAnchor).isActive = true
+            
+            return sw
+        }()
+        
         beginButton = {
             let button = UIButton(type: .system)
             button.setTitle("Begin Test", for: .normal)
@@ -222,12 +253,14 @@ class ConnectTheDots: UIViewController {
             button.centerXAnchor.constraint(equalTo: startView.centerXAnchor).isActive = true
             button.leftAnchor.constraint(greaterThanOrEqualTo: startView.leftAnchor).isActive = true
             button.rightAnchor.constraint(lessThanOrEqualTo: startView.rightAnchor).isActive = true
+            button.topAnchor.constraint(greaterThanOrEqualTo: useDirectedEdgesLabel.bottomAnchor, constant: 5).isActive = true
             
             button.addTarget(self, action: #selector(beginTest), for: .touchUpInside)
             
             return button
         }()
     }
+    
     
     private func setupDisplayView() {
         
@@ -415,6 +448,7 @@ class ConnectTheDots: UIViewController {
             label.bottomAnchor.constraint(equalTo: score.topAnchor, constant: -12).isActive = true
             label.topAnchor.constraint(greaterThanOrEqualTo: resultMessage.bottomAnchor, constant: 15).isActive = true
             label.topAnchor.constraint(equalTo: resultMessage.bottomAnchor, constant: 80).withPriority(.defaultHigh).isActive = true
+            label.setContentCompressionResistancePriority(.required, for: .vertical)
             
             return label
         }()
@@ -480,7 +514,7 @@ class ConnectTheDots: UIViewController {
 
         let cell1 = CAEmitterCell()
         cell1.birthRate = 20.0
-        cell1.lifetime = 6
+        cell1.lifetime = 7
         cell1.scale = 1
         cell1.yAcceleration = 100
 
@@ -512,10 +546,15 @@ class ConnectTheDots: UIViewController {
         }
     }
     
+    @objc private func toggleDirectedness() {
+        PlayerRecord.current.isDirected = useDirectedEdgesSwitch.isOn
+    }
+    
     @objc private func beginTest() {
         var availableTime = max(5, PlayerRecord.current.connectionCount)
         displayPrompt.attributedText = "Please memorize the edge configuration below. You have up to \(availableTime) seconds. You can rotate the graph if that helps.".styled(with: .textStyle)
         displayRing.numberOfDots = PlayerRecord.current.nodeCount
+        displayRing.directed = PlayerRecord.current.isDirected
         
         let n = PlayerRecord.current.nodeCount
         let e = PlayerRecord.current.connectionCount
@@ -533,7 +572,11 @@ class ConnectTheDots: UIViewController {
         var possibleEdges = [Connection]()
         for i in 0..<n-1 {
             for j in (i+1)..<n {
-                possibleEdges.append(Connection(i, j))
+                if Int.random(in: 0...1) == 0 {
+                    possibleEdges.append(Connection(i, j))
+                } else {
+                    possibleEdges.append(Connection(j, i))
+                }
             }
         }
         
@@ -562,6 +605,7 @@ class ConnectTheDots: UIViewController {
         memorizeTimer = nil
         recallRing.connections.removeAll()
         recallRing.numberOfDots = PlayerRecord.current.nodeCount
+        recallRing.directed = PlayerRecord.current.isDirected
         
         displayView.isHidden = true
         recallView.isHidden = false
@@ -598,7 +642,7 @@ class ConnectTheDots: UIViewController {
     @objc private func viewAnswers() {
         navigationItem.backBarButtonItem = .init(title: "Results", style: .plain, target: nil, action: nil)
         let bestAlignment = recallRing.alignedConnections(at: displayRing.bestAlignment(for: recallRing.connections))
-        let answerVC = GraphUserAnswers(userCon: bestAlignment, trueCon: displayRing.connections)
+        let answerVC = GraphUserAnswers(userCon: bestAlignment, trueCon: displayRing.connections, directed: PlayerRecord.current.isDirected)
         navigationController?.pushViewController(answerVC, animated: true)
     }
     

@@ -32,6 +32,7 @@ class PlayerRecord: NSObject {
     // Spatial challenge
     var connectionCount = 5 { didSet { save() } }
     var nodeCount = 6 { didSet { save() } }
+    var isDirected = false { didSet { save() } }
     
     /// The segment index of the memory test type.
     var memoryTestType: RecallType = .digits { didSet { save() } }
@@ -62,6 +63,7 @@ class PlayerRecord: NSObject {
         
         connectionCount = dictionary["connectionCount"]?.int ?? 5
         nodeCount = dictionary["vertexCount"]?.int ?? 6
+        isDirected = dictionary["isDirected"]?.bool ?? false
     }
     
     var encodedJSON: JSON {
@@ -78,6 +80,7 @@ class PlayerRecord: NSObject {
         
         json.dictionaryObject?["connectionCount"] = connectionCount
         json.dictionaryObject?["vertexCount"] = nodeCount
+        json.dictionaryObject?["isDirected"] = isDirected
         
         var serializedRecord = [String: Double]()
         for (length, duration) in gridRecord {

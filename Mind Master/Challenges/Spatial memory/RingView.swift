@@ -26,6 +26,18 @@ class RingView: UIView {
         didSet { setNeedsDisplay() }
     }
     
+    var wingLength: CGFloat {
+        return max(connectionWidth * 3, 20)
+    }
+    
+    var wingThickness: CGFloat = 2 {
+        didSet { setNeedsDisplay() }
+    }
+    
+    var wingAngle: CGFloat = .pi / 6 {
+        didSet { setNeedsDisplay() }
+    }
+    
     /// How much is rotated (in radians) during a rotation gesture event.
     private dynamic var rotationDelta: CGFloat = 0
     
@@ -39,6 +51,7 @@ class RingView: UIView {
     }
     
     var editable = true
+    var directed = false
     
     private var sourceIsActivelySelected = false
     
@@ -51,6 +64,14 @@ class RingView: UIView {
         didSet { setNeedsDisplay() }
     }
     var absentConnections = Set<Connection>() {
+        didSet { setNeedsDisplay() }
+    }
+    
+    var rightDirections = Set<Connection>() {
+        didSet { setNeedsDisplay() }
+    }
+    
+    var wrongDirections = Set<Connection>() {
         didSet { setNeedsDisplay() }
     }
     
@@ -101,13 +122,18 @@ class RingView: UIView {
         return max(5, min(25, dotRadius / 3))
     }
     
+    /// Convenient computed variable for computing the entire radius of a focused node.
+    private var selectedNodeRadius: CGFloat {
+        return dotRadius + selectionSpacing * 1.5 + selectionWidth
+    }
+    
     /// The distance in pixels between the dot and its selection ring.
     private var selectionSpacing: CGFloat {
         return max(3, selectionWidth + 1)
     }
     
     private var connectionWidth: CGFloat {
-        return max(5, dotRadius * 0.4)
+        return max(5, dotRadius * 0.38)
     }
     
     /// The radius of the ring, measured by the stroke line.
@@ -149,7 +175,7 @@ class RingView: UIView {
             
             if selectedPosition == i
                 || (draggedPosition?.distance(to: points[i]) ?? .infinity) < visibleRadius(at: i) {
-                let outer = UIBezierPath(arcCenter: points[i], radius: dotRadius + selectionSpacing * 1.5 + selectionWidth, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+                let outer = UIBezierPath(arcCenter: points[i], radius: selectedNodeRadius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
                 AppColors.background.setFill()
                 outer.fill()
                 
@@ -170,8 +196,28 @@ class RingView: UIView {
         // Draw the intended connection, if exists.
         if let sourceIndex = selectedPosition, let target = draggedPosition {
             let path = UIBezierPath()
-            path.move(to: pointAt(index: sourceIndex))
+            let sourcePoint = pointAt(index: sourceIndex)
+            path.move(to: sourcePoint)
             path.addLine(to: possibleDestination ?? target)
+            
+            if directed && (possibleDestination != nil || sourcePoint.distance(to: target) > selectedNodeRadius) {
+                
+                // First get the angle of the outgoing edge
+                let angle = getAngle(from: sourcePoint, to: possibleDestination ?? target)
+                
+                // Next, figure out the top of the arrow.
+                let arrowTop: CGPoint
+                if let targetNodeCenter = possibleDestination {
+                    let dx = dotRadius * cos(angle)
+                    let dy = dotRadius * sin(angle)
+                    arrowTop = CGPoint(x: targetNodeCenter.x - dx, y: targetNodeCenter.y + dy)
+                } else {
+                    arrowTop = target
+                }
+                
+                drawArrowhead(from: sourcePoint, to: arrowTop, color: AppColors.spatialLight.withAlphaComponent(0.65))
+            }
+            
             path.lineCapStyle = .round
             path.lineWidth = connectionWidth
             let dashStyle: [CGFloat] = [connectionWidth, connectionWidth * 2]
@@ -183,31 +229,92 @@ class RingView: UIView {
         // Draw the connections
         for conn in connections where max(conn.indexA, conn.indexB) < numberOfDots {
             let path = UIBezierPath()
-            path.move(to: pointAt(index: conn.indexA))
-            path.addLine(to: pointAt(index: conn.indexB))
+            let sourcePoint = pointAt(index: conn.indexA)
+            let targetPoint = pointAt(index: conn.indexB)
+            path.move(to: sourcePoint)
+            path.addLine(to: targetPoint)
             path.lineWidth = connectionWidth
             connectionColor.setStroke()
             path.stroke()
+            
+            if directed {
+                let angle = getAngle(from: sourcePoint, to: targetPoint)
+                let dx = dotRadius * cos(angle)
+                let dy = dotRadius * sin(angle)
+                let arrowTop = CGPoint(x: targetPoint.x - dx, y: targetPoint.y + dy)
+                drawArrowhead(from: sourcePoint, to: arrowTop, color: connectionColor)
+            }
         }
         
         // Draw the incorrect connections
         for conn in wrongConnections where max(conn.indexA, conn.indexB) < numberOfDots {
             let path = UIBezierPath()
-            path.move(to: pointAt(index: conn.indexA))
-            path.addLine(to: pointAt(index: conn.indexB))
+            let sourcePoint = pointAt(index: conn.indexA)
+            let targetPoint = pointAt(index: conn.indexB)
+            path.move(to: sourcePoint)
+            path.addLine(to: targetPoint)
             path.lineWidth = connectionWidth
             wrongColor.setStroke()
             path.stroke()
+            
+            if directed {
+                let angle = getAngle(from: sourcePoint, to: targetPoint)
+                let dx = dotRadius * cos(angle)
+                let dy = dotRadius * sin(angle)
+                let arrowTop = CGPoint(x: targetPoint.x - dx, y: targetPoint.y + dy)
+                drawArrowhead(from: sourcePoint, to: arrowTop, color: wrongColor)
+            }
         }
         
         // Draw the missing connections
         for conn in absentConnections where max(conn.indexA, conn.indexB) < numberOfDots {
             let path = UIBezierPath()
-            path.move(to: pointAt(index: conn.indexA))
-            path.addLine(to: pointAt(index: conn.indexB))
+            let sourcePoint = pointAt(index: conn.indexA)
+            let targetPoint = pointAt(index: conn.indexB)
+            path.move(to: sourcePoint)
+            path.addLine(to: targetPoint)
             path.lineWidth = connectionWidth
             missingColor.setStroke()
             path.stroke()
+            
+            if directed {
+                let angle = getAngle(from: sourcePoint, to: targetPoint)
+                let dx = dotRadius * cos(angle)
+                let dy = dotRadius * sin(angle)
+                let arrowTop = CGPoint(x: targetPoint.x - dx, y: targetPoint.y + dy)
+                drawArrowhead(from: sourcePoint, to: arrowTop, color: missingColor)
+            }
+        }
+        
+        // Draw arrows for correct directions (for directed graphs only)
+        if directed {
+            for conn in rightDirections where max(conn.indexA, conn.indexB) < numberOfDots {
+                let sourcePoint = pointAt(index: conn.indexA)
+                let targetPoint = pointAt(index: conn.indexB)
+                
+                let angle = getAngle(from: sourcePoint, to: targetPoint)
+                let arrowTop = CGPoint(x: targetPoint.x - dotRadius * cos(angle),
+                                       y: targetPoint.y + dotRadius * sin(angle))
+                drawArrowhead(from: sourcePoint, to: arrowTop, color: AppColors.correct)
+            }
+        }
+        
+        // Draw wrong directions (for directed graphs only)
+        if directed {
+            for conn in wrongDirections where max(conn.indexA, conn.indexB) < numberOfDots {
+                let sourcePoint = pointAt(index: conn.indexA)
+                let targetPoint = pointAt(index: conn.indexB)
+                
+                let wrongAngle = getAngle(from: sourcePoint, to: targetPoint)
+                let wrongArrowTop = CGPoint(x: targetPoint.x - dotRadius * cos(wrongAngle),
+                                       y: targetPoint.y + dotRadius * sin(wrongAngle))
+                drawArrowhead(from: sourcePoint, to: wrongArrowTop, color: wrongColor)
+                
+                let missingAngle = getAngle(from: targetPoint, to: sourcePoint)
+                let missingArrowTop = CGPoint(x: sourcePoint.x - dotRadius * cos(missingAngle),
+                                       y: sourcePoint.y + dotRadius * sin(missingAngle))
+                drawArrowhead(from: targetPoint, to: missingArrowTop, color: missingColor)
+            }
         }
         
         
@@ -216,6 +323,36 @@ class RingView: UIView {
             dotColor.setFill()
             dot.fill()
         }
+    }
+    
+    private func drawArrowhead(from sourcePoint: CGPoint, to targetPoint: CGPoint, color: UIColor) {
+        let angle = getAngle(from: sourcePoint, to: targetPoint)
+        let arrowhead = UIBezierPath()
+        arrowhead.move(to: targetPoint)
+        var leftWingAngle = angle - wingAngle
+        if leftWingAngle < -.pi { leftWingAngle += 2 * .pi }
+        let leftWingWidth = wingLength * cos(leftWingAngle)
+        let leftWingHeight = wingLength * sin(leftWingAngle)
+        arrowhead.addLine(to: CGPoint(x: targetPoint.x - leftWingWidth, y: targetPoint.y + leftWingHeight))
+        arrowhead.move(to: targetPoint)
+        var rightWingAngle = angle + wingAngle
+        if rightWingAngle > .pi { rightWingAngle -= 2 * .pi }
+        let rightWingWidth = wingLength * cos(rightWingAngle)
+        let rightWingHeight = wingLength * sin(rightWingAngle)
+        arrowhead.addLine(to: CGPoint(x: targetPoint.x - rightWingWidth, y: targetPoint.y + rightWingHeight))
+        arrowhead.lineCapStyle = .round
+        arrowhead.lineWidth = connectionWidth
+        color.setStroke()
+        arrowhead.stroke()
+    }
+        
+    /// Returns the angle (in radians) from the source point to the target point (between -pi and pi).
+    private func getAngle(from source: CGPoint, to target: CGPoint) -> CGFloat {
+        let hyp = sqrt(pow(target.x - source.x, 2) + pow(target.y - source.y, 2))
+        let dx = target.x - source.x
+        let dy = source.y - target.y // Negated because the origin is the top left corner in UIKit.
+        let angle = dy > 0 ? acos(dx / hyp) : -acos(dx / hyp)
+        return angle
     }
     
     /// Returns a point on the ring that's `angle` radians from north.
@@ -271,22 +408,45 @@ class RingView: UIView {
         let normalized = otherConnections.map { Connection(($0.indexA + i) % numberOfDots,
                                                            ($0.indexB + i) % numberOfDots) }
         
-        let bestP = fixedPrecision(with: normalized)
-        let bestR = fixedRecall(with: normalized)
+        let bestP = fixedPrecision(with: normalized, directed: directed)
+        let bestR = fixedRecall(with: normalized, directed: directed)
         let bestF1 = f1(bestP, bestR)
         
         return (bestP, bestR, bestF1.isNaN ? 0.0 : bestF1)
     }
     
-    private func fixedPrecision(with otherConnections: [Connection]) -> Double {
-
-        let sameCount = self.connections.intersection(otherConnections).count
-        return Double(sameCount) / Double(otherConnections.count)
+    private func fixedPrecision(with otherConnections: [Connection], directed: Bool = false) -> Double {
+        if directed {
+            var sameCount = 0
+            var target = Set(otherConnections)
+            for conn in connections where otherConnections.contains(conn) {
+                sameCount += 1
+                if conn.indexA == target.remove(conn)?.indexA {
+                    sameCount += 1
+                }
+            }
+            return Double(sameCount) / Double(otherConnections.count * 2)
+        } else {
+            let sameCount = self.connections.intersection(otherConnections).count
+            return Double(sameCount) / Double(otherConnections.count)
+        }
     }
     
-    private func fixedRecall(with otherConnections: [Connection]) -> Double {
-        let sameCount = self.connections.intersection(otherConnections).count
-        return Double(sameCount) / Double(connections.count)
+    private func fixedRecall(with otherConnections: [Connection], directed: Bool = false) -> Double {
+        if directed {
+            var sameCount = 0
+            var target = Set(otherConnections)
+            for conn in connections where otherConnections.contains(conn) {
+                sameCount += 1
+                if conn.indexA == target.remove(conn)?.indexA {
+                    sameCount += 1
+                }
+            }
+            return Double(sameCount) / Double(connections.count * 2)
+        } else {
+            let sameCount = self.connections.intersection(otherConnections).count
+            return Double(sameCount) / Double(connections.count)
+        }
     }
 
     private func f1(_ precision: Double, _ recall: Double) -> Double {
@@ -322,7 +482,7 @@ extension RingView {
                     selectedPosition = i
                     sourceIsActivelySelected = true
                 } else if i != selectedPosition {
-                    let new = Connection(i, selectedPosition!)
+                    let new = Connection(selectedPosition!, i)
                     connections.formSymmetricDifference([new])
                     selectedPosition = nil
                 }
@@ -353,7 +513,7 @@ extension RingView {
             if touch.location(in: self).distance(to: points[i]) < visibleRadius(at: i) {
                 if selectedPosition != i {
                     UISelectionFeedbackGenerator().selectionChanged()
-                    let new = Connection(i, selectedPosition!)
+                    let new = Connection(selectedPosition!, i)
                     connections.formSymmetricDifference([new])
                 }
                 if selectedPosition == i && sourceIsActivelySelected {
