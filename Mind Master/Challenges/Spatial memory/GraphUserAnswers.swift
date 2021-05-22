@@ -170,7 +170,7 @@ class GraphUserAnswers: UIViewController {
         correctLabel = {
             let label = UILabel()
             if directed {
-                label.text = "Correct (\(correctCount.edges) edges, \(correctCount.directions) directions)"
+                label.text = "Correct (\(correctCount.edges) edge\(incorrectCount.edges == 1 ? "" : "s"), \(correctCount.directions) direction\(correctCount.directions == 1 ? "" : "s"))"
             } else {
                 label.text = "Correct (\(correctCount.edges) edges)"
             }
@@ -204,7 +204,7 @@ class GraphUserAnswers: UIViewController {
         incorrectLabel = {
             let label = UILabel()
             if directed {
-                label.text = "Extra (\(incorrectCount.edges) edges, \(incorrectCount.directions) directions)"
+                label.text = "Extra (\(incorrectCount.edges) edge\(incorrectCount.edges == 1 ? "" : "s"), \(incorrectCount.directions) direction\(incorrectCount.directions == 1 ? "" : "s"))"
             } else {
                 label.text = "Extra (\(incorrectCount.edges) edges)"
             }
@@ -238,7 +238,7 @@ class GraphUserAnswers: UIViewController {
         missingLabel = {
             let label = UILabel()
             if directed {
-                label.text = "Missing (\(absentCount.edges) edges, \(absentCount.directions) directions)"
+                label.text = "Missing (\(absentCount.edges) edge\(absentCount.edges == 1 ? "" : "s"), \(absentCount.directions) direction\(absentCount.directions == 1 ? "" : "s"))"
             } else {
                 label.text = "Missing (\(absentCount.edges) edge)"
             }

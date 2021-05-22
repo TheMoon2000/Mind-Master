@@ -27,7 +27,7 @@ class RingView: UIView {
     }
     
     var wingLength: CGFloat {
-        return max(connectionWidth * 3, 20)
+        return max(connectionWidth * 3, 18)
     }
     
     var wingThickness: CGFloat = 2 {
