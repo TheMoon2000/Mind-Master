@@ -44,10 +44,14 @@ A collection of challenges (games) that can boost one's cognitive capacity. It's
     <img src="Screenshots/memory-size.png" width=240>
 
 
-    - Undirected graphs. In this mode, you will be asked to memorize the edges of a graph. This challenge tests your ability to remember spatial information (as opposed to sequential information). Directed graphs may be coming soon.
+    - Undirected graphs. In this mode, you will be asked to memorize the edges of a graph. This challenge tests your ability to remember spatial information (as opposed to sequential information).
     
     <img src="Screenshots/undirected-graph.png" width=240>
     <img src="Screenshots/undirected-graph-recall.png" width=240>
     <img src="Screenshots/undirected-graph-answer.png" width=240>
     
-    
+    - Directed graphs. Same rules as undirected graphs, except this time you must draw the edges in the correct direction. When scoring a graph, both the edge and the direction are taken into account.
+
+    <img src="Screenshots/directed-graph-display.png" width=240>
+    <img src="Screenshots/directed-graph-recall.png" width=240>
+    <img src="Screenshots/directed-graph-answer.png" width=240>

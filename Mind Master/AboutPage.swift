@@ -34,6 +34,8 @@ class AboutPage: UIViewController {
             tv.contentInset.bottom = 20
             tv.isEditable = false
             tv.backgroundColor = .clear
+            tv.dataDetectorTypes = .link
+            tv.linkTextAttributes[NSAttributedString.Key.foregroundColor] = AppColors.link
             tv.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(tv)
             
