@@ -186,8 +186,8 @@ class ConnectTheDots: UIViewController {
         nodesSlider = {
             let sliderView = SegmentedSlider()
             sliderView.tintColor = AppColors.spatial
-            sliderView.minItems = 4
-            sliderView.maxItems = 24
+            sliderView.minItems = 3
+            sliderView.maxItems = 20
             sliderView.currentItem = PlayerRecord.current.nodeCount
             sliderView.translatesAutoresizingMaskIntoConstraints = false
             startView.addSubview(sliderView)
@@ -223,6 +223,7 @@ class ConnectTheDots: UIViewController {
         
         useDirectedEdgesSwitch = {
             let sw = UISwitch()
+            sw.onTintColor = view.tintColor
             sw.isOn = PlayerRecord.current.isDirected
             sw.translatesAutoresizingMaskIntoConstraints = false
             sw.addTarget(self, action: #selector(toggleDirectedness), for: .valueChanged)
@@ -598,6 +599,7 @@ class ConnectTheDots: UIViewController {
         
         startView.isHidden = true
         displayView.isHidden = false
+        print(displayRing.dotRadius)
     }
     
     @objc private func beginRecall() {

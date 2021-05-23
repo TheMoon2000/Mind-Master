@@ -27,14 +27,14 @@ class RingView: UIView {
     }
     
     var wingLength: CGFloat {
-        return max(connectionWidth * 3, 18)
+        return max(connectionWidth * 2.8, 16)
     }
     
     var wingThickness: CGFloat = 2 {
         didSet { setNeedsDisplay() }
     }
     
-    var wingAngle: CGFloat = .pi / 6 {
+    var wingAngle: CGFloat = .pi / 6.1 {
         didSet { setNeedsDisplay() }
     }
     
@@ -113,8 +113,8 @@ class RingView: UIView {
     private let ringWidth: CGFloat = 3
     
     /// The radius of a dot.
-    private var dotRadius: CGFloat {
-        return max(ringWidth + 5, min(35, bounds.width / 30 - CGFloat(numberOfDots) / 4 + 4))
+    var dotRadius: CGFloat {
+        return max(ringWidth + 5, min(30, bounds.width / 50 - CGFloat(numberOfDots) / 10 + ringWidth + 5))
     }
     
     /// The radius of the selection.
@@ -133,7 +133,7 @@ class RingView: UIView {
     }
     
     private var connectionWidth: CGFloat {
-        return max(5, dotRadius * 0.38)
+        return max(5, dotRadius * 0.37)
     }
     
     /// The radius of the ring, measured by the stroke line.
@@ -342,7 +342,7 @@ class RingView: UIView {
         arrowhead.addLine(to: CGPoint(x: targetPoint.x - rightWingWidth, y: targetPoint.y + rightWingHeight))
         arrowhead.lineCapStyle = .round
         arrowhead.lineWidth = connectionWidth
-        color.setStroke()
+        color.withAlphaComponent(1.0).setStroke()
         arrowhead.stroke()
     }
         
